@@ -2,14 +2,15 @@
 ## v1.3.0
 - Bring back Android support.
 - Add macOS support.
-- Refactor everything to avoid spawning phantom PlayLayers.
+- Refactor everything to avoid spawning phantom PlayLayers, and instead reading the level's decompressed string.
 - Rebrand mod display name.
 - Change mod ID, so that Globed's incompatibility list stays the same.
+- Bump minimum Geode version and Geode Node ID requirements.
 - Added more level tags (check the `about.md` for more info).
 ## v1.2.0
-- Drop Android support due to crashes.
+- Attempt to fix crashes from refreshing a level.
 ## v1.1.1
-- Drop Android support due to crashes.
+- Attempt to fix an unspecified crash.
 ## v1.1.0
 - Fixed the invisible cursor glitch.
 ## v1.0.1
