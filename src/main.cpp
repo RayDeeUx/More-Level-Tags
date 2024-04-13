@@ -96,7 +96,7 @@ class $modify(LevelInfoLayer)
 
 		if (!LevelInfoLayer::init(p0, p1)) { return false; }
 
-		if (!getChildByIDRecursive("info-button") || !getChildByIDRecursive("refresh-button")) { return true; } // avoid false positives with robtop's levels
+		if (p0->m_accountID.value() == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return true; } // avoid false positives with robtop's levels
 
 		menu = CCMenu::create();
 		menu->setContentSize(ccp(0, 0));
