@@ -1,4 +1,4 @@
-# Even More Level Tags
+# EvenMoreLevelTags
 
 Adds <cl>even more</c> tags next to the level author's name in a level's info layer to symbolize a level's traits.
 

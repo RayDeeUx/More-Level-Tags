@@ -7,9 +7,9 @@
 		"mac": "2.200"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
-	"name": "Even More Level Tags",
+	"name": "EvenMoreLevelTags",
 	"developers": ["TheSillyDoggo", "RayDeeUx"],
-	"description": "Adds Even More Level Tags based on a level's traits.",
+	"description": "Adds EvenMoreLevelTags based on a level's traits.",
 	"dependencies": [
         {
             "id": "geode.node-ids",
