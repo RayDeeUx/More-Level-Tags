@@ -9,7 +9,8 @@
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
 	"name": "EvenMoreLevelTags",
 	"developers": ["TheSillyDoggo", "RayDeeUx"],
-	"description": "Adds EvenMoreLevelTags based on a level's traits.",
+	"description": "Adds even more level tags based on a level's traits.",
+	"repository": "https://github.com/RayDeeUx/More-Level-Tags",
 	"dependencies": [
         {
             "id": "geode.node-ids",
