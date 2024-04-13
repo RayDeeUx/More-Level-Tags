@@ -1,18 +1,27 @@
 {
-	"geode": "2.0.0",
-	"version": "v1.2.0",
+	"geode": "2.0.0-beta.23",
+	"version": "v1.3.0",
 	"gd": {
-		"win": "2.204"
+		"win": "2.204",
+		"android": "2.205",
+		"mac": "2.200"
 	},
-	"id": "thesillydoggo.moretags",
-	"name": "More Level Tags",
-	"developer": "TheSillyDoggo",
-	"description": "hello NothingIsScary :3",
+	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
+	"name": "Even More Level Tags",
+	"developers": ["TheSillyDoggo", "RayDeeUx"],
+	"description": "Adds Even More Level Tags based on a level's traits.",
 	"dependencies": [
         {
             "id": "geode.node-ids",
-            "version": "v1.1.0",
+            "version": ">=v1.8.0",
             "importance": "required"
+        }
+    ],
+    "incompatibilities": [
+        {
+            "id": "thesillydoggo.moretags",
+            "version": "*",
+            "importance": "breaking"
         }
     ]
 }
