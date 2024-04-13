@@ -96,6 +96,8 @@ class $modify(LevelInfoLayer)
 
 		if (!LevelInfoLayer::init(p0, p1)) { return false; }
 
+		if (!getChildByIDRecursive("info-button") || !getChildByIDRecursive("refresh-button")) { return true; } // avoid false positives with robtop's levels
+
 		menu = CCMenu::create();
 		menu->setContentSize(ccp(0, 0));
 		menu->setID("more-level-tags-menu"_spr);
