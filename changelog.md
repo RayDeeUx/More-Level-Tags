@@ -1,7 +1,6 @@
 # EvenMoreLevelTags Changelog
 ## v1.3.0
 - Bring back Android support.
-- Add macOS support.
 - Refactor everything to avoid spawning phantom PlayLayers, and instead reading the level's decompressed string.
 - Rebrand mod display name.
 - Change mod ID, so that Globed's incompatibility list stays the same.

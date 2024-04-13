@@ -3,8 +3,7 @@
 	"version": "v1.3.0",
 	"gd": {
 		"win": "2.204",
-		"android": "2.205",
-		"mac": "2.200"
+		"android": "2.205"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
 	"name": "EvenMoreLevelTags",
