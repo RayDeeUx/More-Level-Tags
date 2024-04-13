@@ -14,4 +14,4 @@ Tags and their meanings:
 - ![Scale trigger icon](frame:edit_eScaleComBtn_001.png&scale:0.35) | Level disables the negative scale fix
 - ![Cube icon](frame:portal_03_extra_2_001.png&scale:0.85) | Level uses 2P mode
 
-If a level's tags ever appear to be in the wrong position, simply exit and re-enter the level's info layer.
+This mod is a (consenting) continuation of TheSillyDoggo's "More Level Tags" mod, and is licensed under the LGPLv2 license.

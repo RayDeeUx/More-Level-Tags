@@ -7,6 +7,7 @@
 - Change mod ID, so that Globed's incompatibility list stays the same.
 - Bump minimum Geode version and Geode Node ID requirements.
 - Added more level tags (check the `about.md` for more info).
+- License everything under the LGPLv2 license.
 ## v1.2.0
 - Attempt to fix crashes from refreshing a level.
 ## v1.1.1

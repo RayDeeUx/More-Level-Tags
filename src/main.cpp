@@ -16,6 +16,11 @@ CCNode* t;
 std::vector<CCNode*> buttons;
 bool isRefreshing = false;
 
+/*
+	consent to continue TheSillyDoggo's More Level Tags mod is below:
+	https://discord.com/channels/911701438269386882/911702535373475870/1228540436277366794
+*/
+
 void hideTags(std::string decomp) {
 	if (buttons.size() < 1) return; 
 	if (decomp.size() > 1) {
@@ -236,7 +241,9 @@ class $modify(LevelInfoLayer)
 			{
 				buttons[i]->setPositionX((18 / 0.15f) * i);
 			}
-
+			
+			menu->setScale(0.15f);
+			menu->setPosition(as<CCMenu*>(this->getChildByID("creator-info-menu"))->getPosition() + ccp(as<CCMenu*>(this->getChildByID("creator-info-menu"))->getScaledContentSize().width / 2 + 7 + (this->getChildByID("copy-indicator") ? 18 : 0) + (this->getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
 		}
 		isRefreshing = false;
 	}
