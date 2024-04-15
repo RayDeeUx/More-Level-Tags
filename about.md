@@ -2,7 +2,7 @@
 
 Adds <cl>even more</c> tags next to the level author's name in a level's info layer to symbolize a level's traits.
 
-Disclaimer: Due to various technical limitations, not all levels will receive this treatment. Android users will also benefit from exiting and re-entering the level info layer to correctly re-position the level tags.
+Disclaimer: Due to various technical limitations, not all levels will receive this treatment. Users will also benefit from exiting and re-entering the level info layer to correctly re-position the level tags.
 
 Tags and their meanings:
 - ![Ship icon](frame:portal_04_extra_2_001.png&scale:0.85) | Level uses legacy upside down ship physics
