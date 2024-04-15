@@ -5,7 +5,6 @@
 using namespace geode::prelude;
 
 CCMenu* menu;
-LoadingCircle* loading;
 CCNode* l;
 CCNode* r;
 CCNode* f;
@@ -89,6 +88,10 @@ class $modify(LevelInfoLayer)
 		isRefreshing = true;
 		LevelInfoLayer::onUpdate(sender);
 	}
+	void onPlay(cocos2d::CCObject* sender) {
+		isRefreshing = true;
+		LevelInfoLayer::onPlay(sender);
+	}
 	bool init(GJGameLevel* p0, bool p1)
 	{
 		isRefreshing = false;
@@ -103,12 +106,6 @@ class $modify(LevelInfoLayer)
 		menu->setID("more-level-tags-menu"_spr);
 		menu->setScale(0.15f);
 		menu->setPosition(as<CCMenu*>(this->getChildByID("creator-info-menu"))->getPosition() + ccp(as<CCMenu*>(this->getChildByID("creator-info-menu"))->getScaledContentSize().width / 2 + 7 + (this->getChildByID("copy-indicator") ? 18 : 0) + (this->getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
-
-		loading = LoadingCircle::create();
-		loading->ignoreAnchorPointForPosition(false);
-		loading->m_fade = false;
-		loading->show();
-		menu->addChild(loading);
 
 		auto ship = CCSprite::createWithSpriteFrameName("portal_04_extra_2_001.png");
 		ship->setScale(3.5f);
@@ -173,8 +170,6 @@ class $modify(LevelInfoLayer)
 
 		if (p0->m_levelString.size() > 1)
 		{
-
-			if (loading) { loading->removeFromParent(); }
 			std::string decomp = ZipUtils::decompressString(p0->m_levelString.c_str(), true, 0);
 			hideTags(decomp);
 		} else {
@@ -202,7 +197,6 @@ class $modify(LevelInfoLayer)
 				buttons.push_back(t);
 				r->setVisible(false);
 			}
-			if (loading) { loading->setVisible(true); }
 		}
 
 		for (size_t i = 0; i < buttons.size(); i++)
@@ -222,7 +216,6 @@ class $modify(LevelInfoLayer)
 		{
 			if (p0->m_levelString.size() > 1)
 			{
-				if (loading) { loading->setVisible(false); }
 				if (!isRefreshing) {
 					std::string decomp = ZipUtils::decompressString(p0->m_levelString.c_str(), true, 0);
 					hideTags(decomp);
@@ -236,7 +229,6 @@ class $modify(LevelInfoLayer)
 				if (h) { h->setVisible(false); }
 				if (m) { m->setVisible(false); }
 				if (t) { t->setVisible(false); }
-				if (loading) { loading->setVisible(true); }
 			}
 
 			for (size_t i = 0; i < buttons.size(); i++)
