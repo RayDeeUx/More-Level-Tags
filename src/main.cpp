@@ -18,7 +18,7 @@ class $modify(LevelInfoLayer) {
 		CCNode* m = nullptr;
 		CCNode* n = nullptr;
 		CCNode* t = nullptr;
-		std::vector<CCNode*> buttons = nullptr;
+		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
 	void hideTags(std::string decomp) {
