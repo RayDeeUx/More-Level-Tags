@@ -29,7 +29,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->l->isVisible())
 				{
 					m_fields->l->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), l), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), l), m_fields->buttons.end());
 				}
 			}
 			if ((m_fields->r != nullptr) && decomp.find("kA34,0")) {
@@ -37,7 +37,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->r->isVisible())
 				{
 					m_fields->r->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), r), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), r), m_fields->buttons.end());
 				}
 			}
 			if ((m_fields->f != nullptr) && decomp.find("kA11,1")) {
@@ -45,7 +45,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->f->isVisible())
 				{
 					m_fields->f->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), f), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), f), m_fields->buttons.end());
 				}
 			}
 			if ((m_fields->h != nullptr) && decomp.find("kA37,0")) {
@@ -53,7 +53,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->h->isVisible())
 				{
 					m_fields->h->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), h), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), h), m_fields->buttons.end());
 				}
 			}
 			if ((m_fields->m != nullptr) && decomp.find("kA27,0")) {
@@ -61,7 +61,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->m->isVisible())
 				{
 					m_fields->m->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), m), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m), m_fields->buttons.end());
 				}
 			}
 			if ((m_fields->t != nullptr) && decomp.find("kA40,0")) {
@@ -69,7 +69,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->t->isVisible())
 				{
 					m_fields->t->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), t), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), t), m_fields->buttons.end());
 				}
 			}
 			if ((m_fields->n != nullptr) && decomp.find("kA33,0")) {
@@ -77,7 +77,7 @@ class $modify(LevelInfoLayer) {
 				if (!m_fields->n->isVisible())
 				{
 					m_fields->n->removeFromParent();
-					buttons.erase(std::remove(buttons.begin(), buttons.end(), n), buttons.end());
+					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), n), m_fields->buttons.end());
 				}
 			}
 		}
@@ -228,7 +228,7 @@ class $modify(LevelInfoLayer) {
 				if (m_fields->t) { m_fields->t->setVisible(false); }
 			}
 
-			for (size_t i = 0; i < buttons.size(); i++) {
+			for (size_t i = 0; i < m_fields->buttons.size(); i++) {
 				m_fields->buttons[i]->setPositionX((18 / 0.15f) * i);
 			}
 			
