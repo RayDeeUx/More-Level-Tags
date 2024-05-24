@@ -238,6 +238,6 @@ class $modify(LevelInfoLayer) {
 				m_fields->menu->setVisible(true);
 			}
 		}
-		isRefreshing = false;
+		m_fields->isRefreshing = false;
 	}
 };
