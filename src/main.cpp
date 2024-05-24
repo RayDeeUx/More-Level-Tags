@@ -23,6 +23,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	};
 	void hideTags() {
 		if (m_fields->buttons.empty()) return;
+		if (m_fields->isRefreshing) return;
 		std::string decomp = ZipUtils::decompressString(m_level->m_levelString, true, 0);
 		if (decomp.size() > 1) {
 			if ((m_fields->legacyShip != nullptr) && decomp.find("kA32,0")) {
@@ -83,7 +84,17 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			}
 		}
 	}
+	void onUpdate(cocos2d::CCObject* sender) {
+		m_fields->isRefreshing = true;
+		LevelInfoLayer::onUpdate(sender);
+	}
+	void onPlay(cocos2d::CCObject* sender) {
+		m_fields->isRefreshing = true;
+		LevelInfoLayer::onPlay(sender);
+	}
 	void setupLevelInfo() {
+		m_fields->isRefreshing = false;
+
 		LevelInfoLayer::setupLevelInfo();
 
 		if (!m_fields->buttons.empty()) { m_fields->buttons.clear(); }
@@ -206,7 +217,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (m_fields->menu) {
 			m_fields->menu->setVisible(false);
 			if (p0->m_levelString.size() > 1) {
-				std::string decomp = ZipUtils::decompressString(p0->m_levelString, true, 0);
 				MyLevelInfoLayer::hideTags();
 			}
 
