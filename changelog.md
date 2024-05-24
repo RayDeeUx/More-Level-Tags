@@ -1,4 +1,6 @@
 # EvenMoreLevelTags Changelog
+## v1.3.2
+- Changed function hooks to minimize crashes.
 ## v1.3.1
 - Fix a few visual bugs and other things that weren't caught the first time around. 
 ## v1.3.0

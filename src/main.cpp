@@ -8,7 +8,7 @@ using namespace geode::prelude;
 	https://discord.com/channels/911701438269386882/911702535373475870/1228540436277366794
 */
 
-class $modify(LevelInfoLayer) {
+class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	struct Fields {
 		CCMenu* menu = nullptr;
 		CCNode* legacyShip = nullptr;
@@ -21,8 +21,9 @@ class $modify(LevelInfoLayer) {
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
-	void hideTags(std::string decomp) {
-		if (m_fields->buttons.size() < 1) return;
+	void hideTags() {
+		if (m_fields->buttons.empty()) return;
+		std::string decomp = ZipUtils::decompressString(m_level->m_levelString, true, 0);
 		if (decomp.size() > 1) {
 			if ((m_fields->legacyShip != nullptr) && decomp.find("kA32,0")) {
 				m_fields->legacyShip->setVisible(decomp.find("kA32,0") != std::string::npos);
@@ -82,25 +83,15 @@ class $modify(LevelInfoLayer) {
 			}
 		}
 	}
-	void onUpdate(cocos2d::CCObject* sender) {
-		m_fields->isRefreshing = true;
-		LevelInfoLayer::onUpdate(sender);
-	}
-	void onPlay(cocos2d::CCObject* sender) {
-		m_fields->isRefreshing = true;
-		LevelInfoLayer::onPlay(sender);
-	}
-	bool init(GJGameLevel* p0, bool p1)
-	{
-		m_fields->isRefreshing = false;
-		if (!m_fields->buttons.empty()) m_fields->buttons.clear();
+	void setupLevelInfo() {
+		LevelInfoLayer::setupLevelInfo();
 
-		if (!LevelInfoLayer::init(p0, p1)) { return false; }
+		if (!m_fields->buttons.empty()) { m_fields->buttons.clear(); }
 
-		if (p0->m_accountID.value() == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return true; } // avoid false positives with robtop's levels
+		if (m_level->m_accountID.value() == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return; } // avoid false positives with robtop's levels
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
-		if (!creatorInfoMenu) { return true; }
+		if (!creatorInfoMenu) { return; }
 
 		m_fields->menu = CCMenu::create();
 		m_fields->menu->setContentSize(ccp(0, 0));
@@ -159,7 +150,7 @@ class $modify(LevelInfoLayer) {
 		m_fields->buttons.push_back(m_fields->negativeScale);
 		m_fields->menu->addChild(m_fields->negativeScale);
 
-		if (p0->m_twoPlayerMode)
+		if (m_level->m_twoPlayerMode)
 		{
 			auto cube = CCSprite::createWithSpriteFrameName("portal_03_extra_2_001.png");
 			cube->setScale(3.5f);
@@ -169,9 +160,8 @@ class $modify(LevelInfoLayer) {
 			m_fields->buttons.push_back(twoPlayer);
 		}
 
-		if (p0->m_levelString.size() > 1) {
-			std::string decomp = ZipUtils::decompressString(p0->m_levelString.c_str(), true, 0);
-			hideTags(decomp);
+		if (m_level->m_levelString.size() > 1) {
+			MyLevelInfoLayer::hideTags();
 		} else {
 			if (m_fields->legacyShip) {
 				m_fields->buttons.push_back(m_fields->legacyShip);
@@ -208,41 +198,27 @@ class $modify(LevelInfoLayer) {
 		}
 
 		m_fields->menu->setVisible(true);
-
-		return true;
 	}
 
-	virtual void levelDownloadFinished(GJGameLevel* p0)
-	{
+	virtual void levelDownloadFinished(GJGameLevel* p0) {
 		LevelInfoLayer::levelDownloadFinished(p0);
 
 		if (m_fields->menu) {
+			m_fields->menu->setVisible(false);
 			if (p0->m_levelString.size() > 1) {
-				if (!m_fields->isRefreshing) {
-					m_fields->menu->setVisible(false);
-					std::string decomp = ZipUtils::decompressString(p0->m_levelString.c_str(), true, 0);
-					hideTags(decomp);
-				}
-			} else {
-				if (m_fields->legacyShip) { m_fields->legacyShip->setVisible(false); }
-				if (m_fields->legacyRobot) { m_fields->legacyRobot->setVisible(false); }
-				if (m_fields->startFlipped) { m_fields->startFlipped->setVisible(false); }
-				if (m_fields->dynamicHeight) { m_fields->dynamicHeight->setVisible(false); }
-				if (m_fields->multiRotate) { m_fields->multiRotate->setVisible(false); }
-				if (m_fields->twoPointTwo) { m_fields->twoPointTwo->setVisible(false); }
-				if (m_fields->negativeScale) { m_fields->negativeScale->setVisible(false); }
+				std::string decomp = ZipUtils::decompressString(p0->m_levelString, true, 0);
+				MyLevelInfoLayer::hideTags();
 			}
 
 			for (size_t i = 0; i < m_fields->buttons.size(); i++) {
 				m_fields->buttons[i]->setPositionX((18 / 0.15f) * i);
 			}
-			
+
 			if (const auto creatorInfoMenu = getChildByID("creator-info-menu")) {
 				m_fields->menu->setScale(0.15f);
 				m_fields->menu->setPosition(as<CCMenu*>(creatorInfoMenu)->getPosition() + ccp(as<CCMenu*>(creatorInfoMenu)->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
 				m_fields->menu->setVisible(true);
 			}
 		}
-		m_fields->isRefreshing = false;
 	}
 };
