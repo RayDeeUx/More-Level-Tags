@@ -93,7 +93,7 @@ class $modify(LevelInfoLayer) {
 	bool init(GJGameLevel* p0, bool p1)
 	{
 		m_fields->isRefreshing = false;
-		if (!buttons.empty()) m_fields->buttons.clear();
+		if (!m_fields->buttons.empty()) m_fields->buttons.clear();
 
 		if (!LevelInfoLayer::init(p0, p1)) { return false; }
 
