@@ -22,7 +22,7 @@ class $modify(LevelInfoLayer) {
 		bool isRefreshing = false;
 	};
 	void hideTags(std::string decomp) {
-		if (buttons.size() < 1) return; 
+		if (m_fields->buttons.size() < 1) return;
 		if (decomp.size() > 1) {
 			if ((m_fields->l != nullptr) && decomp.find("kA32,0")) {
 				m_fields->l->setVisible(decomp.find("kA32,0") != std::string::npos);
