@@ -21,10 +21,9 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
-	void hideTags() {
-		if (m_fields->buttons.empty()) return;
-		if (m_fields->isRefreshing) return;
-		std::string decomp = ZipUtils::decompressString(m_level->m_levelString, true, 0);
+	void hideTags(GJGameLevel* theLevel) {
+		if (m_fields->buttons.size() < 1) return;
+		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString.c_str(), true, 0);
 		if (decomp.size() > 1) {
 			if ((m_fields->legacyShip != nullptr) && decomp.find("kA32,0")) {
 				m_fields->legacyShip->setVisible(decomp.find("kA32,0") != std::string::npos);
@@ -92,17 +91,17 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->isRefreshing = true;
 		LevelInfoLayer::onPlay(sender);
 	}
-	void setupLevelInfo() {
+	bool init(GJGameLevel* theLevel, bool p1)
+	{
 		m_fields->isRefreshing = false;
+		if (!m_fields->buttons.empty()) m_fields->buttons.clear();
 
-		LevelInfoLayer::setupLevelInfo();
+		if (!LevelInfoLayer::init(theLevel, p1)) { return false; }
 
-		if (!m_fields->buttons.empty()) { m_fields->buttons.clear(); }
-
-		if (m_level->m_accountID.value() == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return; } // avoid false positives with robtop's levels
+		if (theLevel->m_accountID.value() == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return true; } // avoid false positives with robtop's levels
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
-		if (!creatorInfoMenu) { return; }
+		if (!creatorInfoMenu) { return true; }
 
 		m_fields->menu = CCMenu::create();
 		m_fields->menu->setContentSize(ccp(0, 0));
@@ -161,7 +160,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->buttons.push_back(m_fields->negativeScale);
 		m_fields->menu->addChild(m_fields->negativeScale);
 
-		if (m_level->m_twoPlayerMode)
+		if (theLevel->m_twoPlayerMode)
 		{
 			auto cube = CCSprite::createWithSpriteFrameName("portal_03_extra_2_001.png");
 			cube->setScale(.5f);
@@ -171,8 +170,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			m_fields->buttons.push_back(twoPlayer);
 		}
 
-		if (m_level->m_levelString.size() > 1) {
-			MyLevelInfoLayer::hideTags();
+		if (theLevel->m_levelString.size() > 1) {
+			MyLevelInfoLayer::hideTags(theLevel);
 		} else {
 			if (m_fields->legacyShip) {
 				m_fields->buttons.push_back(m_fields->legacyShip);
@@ -209,15 +208,28 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		}
 
 		m_fields->menu->setVisible(true);
+
+		return true;
 	}
 
-	virtual void levelDownloadFinished(GJGameLevel* p0) {
-		LevelInfoLayer::levelDownloadFinished(p0);
+	virtual void levelDownloadFinished(GJGameLevel* theLevel)
+	{
+		LevelInfoLayer::levelDownloadFinished(theLevel);
 
 		if (m_fields->menu) {
-			m_fields->menu->setVisible(false);
-			if (p0->m_levelString.size() > 1) {
-				MyLevelInfoLayer::hideTags();
+			if (theLevel->m_levelString.size() > 1) {
+				if (!m_fields->isRefreshing) {
+					m_fields->menu->setVisible(false);
+					hideTags(theLevel);
+				}
+			} else {
+				if (m_fields->legacyShip) { m_fields->legacyShip->setVisible(false); }
+				if (m_fields->legacyRobot) { m_fields->legacyRobot->setVisible(false); }
+				if (m_fields->startFlipped) { m_fields->startFlipped->setVisible(false); }
+				if (m_fields->dynamicHeight) { m_fields->dynamicHeight->setVisible(false); }
+				if (m_fields->multiRotate) { m_fields->multiRotate->setVisible(false); }
+				if (m_fields->twoPointTwo) { m_fields->twoPointTwo->setVisible(false); }
+				if (m_fields->negativeScale) { m_fields->negativeScale->setVisible(false); }
 			}
 
 			for (size_t i = 0; i < m_fields->buttons.size(); i++) {
@@ -230,5 +242,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				m_fields->menu->setVisible(true);
 			}
 		}
+		m_fields->isRefreshing = false;
 	}
 };
