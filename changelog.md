@@ -1,7 +1,8 @@
 # EvenMoreLevelTags Changelog
 ## v1.3.2
 - Changed function hooks to minimize crashes.
-## v1.3.1
+- Port to 2.206.
+## v1.3.1 (Note: was never published)
 - Fix a few visual bugs and other things that weren't caught the first time around. 
 ## v1.3.0
 - Bring back Android support.
