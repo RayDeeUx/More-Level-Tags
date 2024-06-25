@@ -113,49 +113,49 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		addChild(m_fields->menu);
 
 		auto ship = CCSprite::createWithSpriteFrameName("portal_04_extra_2_001.png");
-		ship->setScale(3.5f);
+		ship->setScale(.5f);
 		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
 		m_fields->legacyShip->setID("legacy-ship"_spr);
 		m_fields->buttons.push_back(m_fields->legacyShip);
 		m_fields->menu->addChild(m_fields->legacyShip);
 
 		auto robot = CCSprite::createWithSpriteFrameName("portal_14_extra_2_001.png");
-		robot->setScale(3.5f);
+		robot->setScale(.5f);
 		m_fields->legacyRobot = CircleButtonSprite::create(robot, CircleBaseColor::Pink, CircleBaseSize::Large);
 		m_fields->legacyRobot->setID("legacy-robot"_spr);
 		m_fields->buttons.push_back(m_fields->legacyRobot);
 		m_fields->menu->addChild(m_fields->legacyRobot);
 
 		auto flip = CCSprite::createWithSpriteFrameName("portal_02_extra_2_001.png");
-		flip->setScale(3.5f);
+		flip->setScale(.5f);
 		m_fields->startFlipped = CircleButtonSprite::create(flip, CircleBaseColor::Pink, CircleBaseSize::Large);
 		m_fields->startFlipped->setID("flip-gravity"_spr);
 		m_fields->buttons.push_back(m_fields->startFlipped);
 		m_fields->menu->addChild(m_fields->startFlipped);
 
 		auto height = CCSprite::createWithSpriteFrameName("portal_19_extra_2_001.png");
-		height->setScale(3.5f);
+		height->setScale(.5f);
 		m_fields->dynamicHeight = CircleButtonSprite::create(height, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->dynamicHeight->setID("dynamic-height"_spr);
 		m_fields->buttons.push_back(m_fields->dynamicHeight);
 		m_fields->menu->addChild(m_fields->dynamicHeight);
 
 		auto rotate = CCSprite::createWithSpriteFrameName("edit_eRotateComBtn_001.png");
-		rotate->setScale(1.5f);
+		rotate->setScale(.5f);
 		m_fields->multiRotate = CircleButtonSprite::create(rotate, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->multiRotate->setID("multi-rotate"_spr);
 		m_fields->buttons.push_back(m_fields->multiRotate);
 		m_fields->menu->addChild(m_fields->multiRotate);
 
 		auto tpt = CCSprite::createWithSpriteFrameName("portal_18_extra_2_001.png");
-		tpt->setScale(3.5f);
+		tpt->setScale(.5f);
 		m_fields->twoPointTwo = CircleButtonSprite::create(tpt, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->twoPointTwo->setID("two-point-two"_spr);
 		m_fields->buttons.push_back(m_fields->twoPointTwo);
 		m_fields->menu->addChild(m_fields->twoPointTwo);
 
 		auto negScale = CCSprite::createWithSpriteFrameName("edit_eScaleComBtn_001.png");
-		negScale->setScale(1.5f);
+		negScale->setScale(.5f);
 		m_fields->negativeScale = CircleButtonSprite::create(negScale, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->negativeScale->setID("negative-scale"_spr);
 		m_fields->buttons.push_back(m_fields->negativeScale);
@@ -164,7 +164,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (m_level->m_twoPlayerMode)
 		{
 			auto cube = CCSprite::createWithSpriteFrameName("portal_03_extra_2_001.png");
-			cube->setScale(3.5f);
+			cube->setScale(.5f);
 			auto twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 			twoPlayer->setID("two-player"_spr);
 			m_fields->menu->addChild(twoPlayer);
