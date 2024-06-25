@@ -21,7 +21,12 @@
         {
             "id": "thesillydoggo.moretags",
             "version": "*",
-            "importance": "breaking"
-        }
+            "importance": "superseded"
+        },
+	{
+            "id": "raydeeux.nolevelrefresh",
+            "version": "*",
+            "importance": "superseded"
+	}
     ]
 }
