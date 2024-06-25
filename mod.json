@@ -1,5 +1,5 @@
 {
-	"geode": "3.0.0",
+	"geode": "3.1.0",
 	"gd": {
 		"win": "2.206",
 		"android": "2.206"
@@ -11,22 +11,26 @@
 	"description": "Adds even more level tags based on a level's traits.",
 	"repository": "https://github.com/RayDeeUx/More-Level-Tags",
 	"dependencies": [
-        {
-            "id": "geode.node-ids",
-            "version": ">=v1.12.0",
-            "importance": "required"
-        }
-    ],
-    "incompatibilities": [
-        {
-            "id": "thesillydoggo.moretags",
-            "version": "*",
-            "importance": "superseded"
-        },
-	{
-            "id": "raydeeux.nolevelrefresh",
-            "version": "*",
-            "importance": "superseded"
+		{
+	            "id": "geode.node-ids",
+	            "version": ">=v1.12.0",
+	            "importance": "required"
+	        }
+    	],
+    	"incompatibilities": [
+		{
+      			"id": "thesillydoggo.moretags",
+		      	"version": "*",
+      	      		"importance": "superseded"
+       		},
+		{
+            		"id": "raydeeux.nolevelrefresh",
+            		"version": "*",
+            		"importance": "superseded"
+		}
+    	],
+	"issues": {
+		"url": "https://discord.com/channels/911701438269386882/1205523212444639292",
+		"info": "Ping me <cl>(@erymanthus)</c> in the Geode SDK Discord server's <cl>#help</c> channel if you need help. <cr>DMs are NOT accepted.</c>"
 	}
-    ]
 }
