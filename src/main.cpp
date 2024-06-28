@@ -23,14 +23,14 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	};
 	void hideTags(GJGameLevel* theLevel) {
 		if (m_fields->buttons.size() < 1) return;
-		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString.c_str(), true, 0);
+		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.size() > 1) {
 			if ((m_fields->legacyShip != nullptr) && decomp.find("kA32,0")) {
 				m_fields->legacyShip->setVisible(decomp.find("kA32,0") != std::string::npos);
 				if (!m_fields->legacyShip->isVisible())
 				{
 					m_fields->legacyShip->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->legacyShip), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->legacyShip);
 				}
 			}
 			if ((m_fields->legacyRobot != nullptr) && decomp.find("kA34,0")) {
@@ -38,7 +38,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (!m_fields->legacyRobot->isVisible())
 				{
 					m_fields->legacyRobot->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->legacyRobot), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->legacyRobot);
 				}
 			}
 			if ((m_fields->startFlipped != nullptr) && decomp.find("kA11,1")) {
@@ -46,7 +46,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (!m_fields->startFlipped->isVisible())
 				{
 					m_fields->startFlipped->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->startFlipped), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->startFlipped);
 				}
 			}
 			if ((m_fields->dynamicHeight != nullptr) && decomp.find("kA37,0")) {
@@ -54,7 +54,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (!m_fields->dynamicHeight->isVisible())
 				{
 					m_fields->dynamicHeight->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->dynamicHeight), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->dynamicHeight);
 				}
 			}
 			if ((m_fields->multiRotate != nullptr) && decomp.find("kA27,0")) {
@@ -62,7 +62,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (!m_fields->multiRotate->isVisible())
 				{
 					m_fields->multiRotate->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->multiRotate), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->multiRotate);
 				}
 			}
 			if ((m_fields->twoPointTwo != nullptr) && decomp.find("kA40,0")) {
@@ -70,7 +70,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (!m_fields->twoPointTwo->isVisible())
 				{
 					m_fields->twoPointTwo->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->twoPointTwo), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->twoPointTwo);
 				}
 			}
 			if ((m_fields->negativeScale != nullptr) && decomp.find("kA33,0")) {
@@ -78,7 +78,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (!m_fields->negativeScale->isVisible())
 				{
 					m_fields->negativeScale->removeFromParent();
-					m_fields->buttons.erase(std::remove(m_fields->buttons.begin(), m_fields->buttons.end(), m_fields->negativeScale), m_fields->buttons.end());
+					std::erase(m_fields->buttons, m_fields->negativeScale);
 				}
 			}
 		}
@@ -220,7 +220,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			if (theLevel->m_levelString.size() > 1) {
 				if (!m_fields->isRefreshing) {
 					m_fields->menu->setVisible(false);
-					hideTags(theLevel);
+					MyLevelInfoLayer::hideTags(theLevel);
 				}
 			} else {
 				if (m_fields->legacyShip) { m_fields->legacyShip->setVisible(false); }
