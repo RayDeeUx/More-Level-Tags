@@ -1,5 +1,4 @@
 #include <Geode/modify/LevelInfoLayer.hpp>
-#include <Geode/modify/GJGameLevel.hpp>
 
 using namespace geode::prelude;
 
