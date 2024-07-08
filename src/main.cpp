@@ -162,7 +162,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (theLevel->m_twoPlayerMode)
 		{
 			auto cube = CCSprite::createWithSpriteFrameName("portal_03_extra_2_001.png");
-			cube->setScale(.5f);
+			cube->setScale(.3f);
 			auto twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 			twoPlayer->setID("two-player"_spr);
 			m_fields->menu->addChild(twoPlayer);
