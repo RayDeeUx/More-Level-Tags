@@ -90,14 +90,17 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->isRefreshing = true;
 		LevelInfoLayer::onPlay(sender);
 	}
-	bool init(GJGameLevel* theLevel, bool p1)
-	{
+	bool init(GJGameLevel* theLevel, bool p1) {
 		m_fields->isRefreshing = false;
 		if (!m_fields->buttons.empty()) m_fields->buttons.clear();
 
 		if (!LevelInfoLayer::init(theLevel, p1)) { return false; }
+		if (!Mod::get()->getSettingValue<bool>("enabled")) { return true; }
 
-		if (theLevel->m_accountID.value() == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return true; } // avoid false positives with robtop's levels
+		int authorID = theLevel->m_accountID.value();
+
+		if (authorID == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return true; } // avoid false positives with robtop's levels
+		if (authorID == 19293579 && !Mod::get()->getSettingValue<bool>("robsVault")) { return true; }
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
 		if (!creatorInfoMenu) { return true; }
@@ -159,10 +162,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->buttons.push_back(m_fields->negativeScale);
 		m_fields->menu->addChild(m_fields->negativeScale);
 
-		if (theLevel->m_twoPlayerMode)
-		{
-			auto cube = CCSprite::createWithSpriteFrameName("portal_03_extra_2_001.png");
-			cube->setScale(.3f);
+		if (theLevel->m_twoPlayerMode) {
+			auto cube = CCSprite::create("2p.png"_spr);
 			auto twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 			twoPlayer->setID("two-player"_spr);
 			m_fields->menu->addChild(twoPlayer);

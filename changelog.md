@@ -2,6 +2,9 @@
 ## v1.3.2
 - Changed function hooks to minimize crashes.
 - Port to 2.206.
+- Added softtoggle.
+- By default, tags will not show up when viewing levels published under the RobsVault account due to technical constraints. (This was not the case in earlier versions of this mod.)
+- Added macOS support, which may be unstable. In case this mod consistently crashes on macOS, support for it will be dropped in future updates (hence the softtoggle).
 ## v1.3.1 (Note: was never published)
 - Fix a few visual bugs and other things that weren't caught the first time around. 
 ## v1.3.0

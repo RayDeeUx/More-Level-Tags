@@ -2,6 +2,7 @@
 	"geode": "3.2.0",
 	"gd": {
 		"win": "2.206",
+		"mac": "2.206",
 		"android": "2.206"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
@@ -10,25 +11,44 @@
 	"developers": ["TheSillyDoggo", "RayDeeUx"],
 	"description": "Adds even more level tags based on a level's traits.",
 	"repository": "https://github.com/RayDeeUx/More-Level-Tags",
+	"settings" : {
+		"enabled": {
+			"name": "Enabled",
+			"description": "Toggles the mod.",
+			"type": "bool",
+			"default": true
+		},
+		"robsVault": {
+			"name": "Enable for RobsVault",
+			"description": "Show level tags on levels under the RobsVault account.\n\n<cp>This is</c> <cr>NOT <cp>recommended,</c> <cy>as levels under the RobsVault account name will show EVERY level tag regardless of the level's traits.</c>",
+			"type": "bool",
+			"default": false
+		}
+	},
 	"dependencies": [
 		{
-	            "id": "geode.node-ids",
-	            "version": ">=v1.12.0",
-	            "importance": "required"
-	        }
-    	],
-    	"incompatibilities": [
-		{
-      			"id": "thesillydoggo.moretags",
-		      	"version": "*",
-      	      		"importance": "superseded"
-       		},
-		{
-            		"id": "raydeeux.nolevelrefresh",
-            		"version": "*",
-            		"importance": "superseded"
+			"id": "geode.node-ids",
+			"version": ">=v1.12.0",
+			"importance": "required"
 		}
-    	],
+	],
+	"incompatibilities": [
+		{
+			"id": "thesillydoggo.moretags",
+			"version": "*",
+			"importance": "superseded"
+		},
+		{
+			"id": "raydeeux.nolevelrefresh",
+			"version": "*",
+			"importance": "superseded"
+		}
+	],
+	"resources": {
+		"sprites": [
+			"resources/2p.png"
+		]
+	},
 	"issues": {
 		"url": "https://discord.com/channels/911701438269386882/1205523212444639292",
 		"info": "Ping me <cl>(@erymanthus)</c> in the Geode SDK Discord server's <cl>#help</c> channel if you need help. <cr>DMs are NOT accepted.</c>"
