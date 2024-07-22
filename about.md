@@ -14,4 +14,4 @@ Tags and their meanings:
 - ![Scale trigger icon](frame:edit_eScaleComBtn_001.png&scale:0.35) | Level disables the negative scale fix
 - ![Cube icon](frame:portal_03_extra_2_001.png&scale:0.85) | Level uses 2P mode
 
-This [Geode mod](https://geode-sdk.org) is a (consenting) continuation of TheSillyDoggo's "More Level Tags" mod, and is licensed under the LGPLv2 license. To report bugs or get help with using my mods, press the Discord button at the lower left corner.
+This [Geode mod](https://geode-sdk.org) is a (consenting) continuation of TheSillyDoggo's "More Level Tags" mod, and is licensed under the LGPLv2 license. To report bugs or get help with using my mods, press the Discord button in the lower left corner.
