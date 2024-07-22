@@ -1,7 +1,7 @@
 # EvenMoreLevelTags Changelog
 ## v1.3.2
 - Changed function hooks to minimize crashes.
-- Port to 2.206.
+- Port to 2.206. Big thanks to CatXus, Aktimoose, ninXout, and hiimjustin000 for helping out with testing!
 - Added softtoggle.
 - By default, tags will not show up when viewing levels published under the RobsVault account due to technical constraints. (This was not the case in earlier versions of this mod.)
 - Added macOS support, which may be unstable. In case this mod consistently crashes on macOS, support for it will be dropped in future updates (hence the softtoggle).
