@@ -1,12 +1,12 @@
 {
-	"geode": "3.4.0",
+	"geode": "4.0.0-alpha.1",
 	"gd": {
-		"win": "2.206",
-		"mac": "2.206",
-		"android": "2.206"
+		"win": "2.2074",
+		"mac": "2.2074",
+		"android": "2.2074"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
-	"version": "v1.3.2",
+	"version": "v1.3.3",
 	"name": "EvenMoreLevelTags",
 	"developers": ["TheSillyDoggo", "RayDeeUx"],
 	"description": "Adds even more level tags based on a level's traits.",
@@ -28,7 +28,7 @@
 	"dependencies": [
 		{
 			"id": "geode.node-ids",
-			"version": ">=v1.12.0",
+			"version": ">=v1.16.0",
 			"importance": "required"
 		}
 	],
@@ -45,9 +45,11 @@
 		}
 	],
 	"resources": {
-		"sprites": [
-			"resources/2p.png"
-		]
+		"spritesheets": {
+			"OneSheet": [
+				"resources/2p.png"
+			]
+		}
 	},
 	"issues": {
 		"url": "https://discord.com/channels/911701438269386882/1205523212444639292",

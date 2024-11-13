@@ -1,4 +1,6 @@
 # EvenMoreLevelTags Changelog
+## v1.3.3
+- Port to 2.2074.
 ## v1.3.2
 - Changed function hooks to minimize crashes.
 - Port to 2.206. Big thanks to CatXus, Aktimoose, ninXout, and hiimjustin000 for helping out with testing!
