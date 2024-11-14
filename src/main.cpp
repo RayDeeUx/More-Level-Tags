@@ -163,7 +163,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->menu->addChild(m_fields->negativeScale);
 
 		if (theLevel->m_twoPlayerMode) {
-			auto cube = CCSprite::create("2p.png"_spr);
+			auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
 			auto twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 			twoPlayer->setID("two-player"_spr);
 			m_fields->menu->addChild(twoPlayer);
