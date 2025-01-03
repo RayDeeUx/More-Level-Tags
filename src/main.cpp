@@ -9,7 +9,7 @@ using namespace geode::prelude;
 
 class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	struct Fields {
-		CCMenu* menu = nullptr;
+		CCNode* menu = nullptr;
 		CCNode* legacyShip = nullptr;
 		CCNode* legacyRobot = nullptr;
 		CCNode* startFlipped = nullptr;
@@ -24,58 +24,51 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (m_fields->buttons.size() < 1) return;
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.size() > 1) {
-			if ((m_fields->legacyShip != nullptr) && decomp.find("kA32,0")) {
+			if (m_fields->legacyShip) {
 				m_fields->legacyShip->setVisible(decomp.find("kA32,0") != std::string::npos);
-				if (!m_fields->legacyShip->isVisible())
-				{
+				if (!m_fields->legacyShip->isVisible()) {
 					m_fields->legacyShip->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->legacyShip);
 				}
 			}
-			if ((m_fields->legacyRobot != nullptr) && decomp.find("kA34,0")) {
+			if (m_fields->legacyRobot) {
 				m_fields->legacyRobot->setVisible(decomp.find("kA34,0") != std::string::npos);
-				if (!m_fields->legacyRobot->isVisible())
-				{
+				if (!m_fields->legacyRobot->isVisible()) {
 					m_fields->legacyRobot->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->legacyRobot);
 				}
 			}
-			if ((m_fields->startFlipped != nullptr) && decomp.find("kA11,1")) {
+			if (m_fields->startFlipped) {
 				m_fields->startFlipped->setVisible(decomp.find("kA11,1") != std::string::npos);
-				if (!m_fields->startFlipped->isVisible())
-				{
+				if (!m_fields->startFlipped->isVisible()) {
 					m_fields->startFlipped->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->startFlipped);
 				}
 			}
-			if ((m_fields->dynamicHeight != nullptr) && decomp.find("kA37,0")) {
+			if (m_fields->dynamicHeight) {
 				m_fields->dynamicHeight->setVisible(decomp.find("kA37,0") != std::string::npos);
-				if (!m_fields->dynamicHeight->isVisible())
-				{
+				if (!m_fields->dynamicHeight->isVisible()) {
 					m_fields->dynamicHeight->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->dynamicHeight);
 				}
 			}
-			if ((m_fields->multiRotate != nullptr) && decomp.find("kA27,0")) {
+			if (m_fields->multiRotate) {
 				m_fields->multiRotate->setVisible(decomp.find("kA27,0") != std::string::npos);
-				if (!m_fields->multiRotate->isVisible())
-				{
+				if (!m_fields->multiRotate->isVisible()) {
 					m_fields->multiRotate->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->multiRotate);
 				}
 			}
-			if ((m_fields->twoPointTwo != nullptr) && decomp.find("kA40,0")) {
+			if (m_fields->twoPointTwo) {
 				m_fields->twoPointTwo->setVisible(decomp.find("kA40,0") != std::string::npos);
-				if (!m_fields->twoPointTwo->isVisible())
-				{
+				if (!m_fields->twoPointTwo->isVisible()) {
 					m_fields->twoPointTwo->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->twoPointTwo);
 				}
 			}
-			if ((m_fields->negativeScale != nullptr) && decomp.find("kA33,0")) {
+			if (m_fields->negativeScale) {
 				m_fields->negativeScale->setVisible(decomp.find("kA33,0") != std::string::npos);
-				if (!m_fields->negativeScale->isVisible())
-				{
+				if (!m_fields->negativeScale->isVisible()) {
 					m_fields->negativeScale->removeFromParent();
 					std::erase(m_fields->buttons, m_fields->negativeScale);
 				}
@@ -94,16 +87,16 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->isRefreshing = false;
 		if (!m_fields->buttons.empty()) m_fields->buttons.clear();
 
-		if (!LevelInfoLayer::init(theLevel, p1)) { return false; }
-		if (!Mod::get()->getSettingValue<bool>("enabled")) { return true; }
+		if (!LevelInfoLayer::init(theLevel, p1)) return false;
+		if (!Mod::get()->getSettingValue<bool>("enabled")) return true;
 
 		int authorID = theLevel->m_accountID.value();
 
-		if (authorID == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) { return true; } // avoid false positives with robtop's levels
-		if (authorID == 19293579 && !Mod::get()->getSettingValue<bool>("robsVault")) { return true; }
+		if (authorID == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) return true; // avoid false positives with robtop's levels
+		if (authorID == 19293579 && !Mod::get()->getSettingValue<bool>("robsVault")) return true;
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
-		if (!creatorInfoMenu) { return true; }
+		if (!creatorInfoMenu) return true;
 
 		m_fields->menu = CCMenu::create();
 		m_fields->menu->setContentSize(ccp(0, 0));
@@ -203,8 +196,10 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			}
 		}
 
-		for (size_t i = 0; i < m_fields->buttons.size(); i++) {
-			m_fields->buttons[i]->setPositionX((18 / 0.15f) * i);
+		int i = 0;
+		for (auto node : CCArrayExt<CCNode*>(m_fields->menu->getChildren())) {
+			node->setPositionX((18 / 0.15f) * i);
+			i++;
 		}
 
 		m_fields->menu->setVisible(true);
@@ -223,17 +218,19 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 					MyLevelInfoLayer::hideTags(theLevel);
 				}
 			} else {
-				if (m_fields->legacyShip) { m_fields->legacyShip->setVisible(false); }
-				if (m_fields->legacyRobot) { m_fields->legacyRobot->setVisible(false); }
-				if (m_fields->startFlipped) { m_fields->startFlipped->setVisible(false); }
-				if (m_fields->dynamicHeight) { m_fields->dynamicHeight->setVisible(false); }
-				if (m_fields->multiRotate) { m_fields->multiRotate->setVisible(false); }
-				if (m_fields->twoPointTwo) { m_fields->twoPointTwo->setVisible(false); }
-				if (m_fields->negativeScale) { m_fields->negativeScale->setVisible(false); }
+				if (m_fields->legacyShip) m_fields->legacyShip->setVisible(false);
+				if (m_fields->legacyRobot) m_fields->legacyRobot->setVisible(false);
+				if (m_fields->startFlipped) m_fields->startFlipped->setVisible(false);
+				if (m_fields->dynamicHeight) m_fields->dynamicHeight->setVisible(false);
+				if (m_fields->multiRotate) m_fields->multiRotate->setVisible(false);
+				if (m_fields->twoPointTwo) m_fields->twoPointTwo->setVisible(false);
+				if (m_fields->negativeScale) m_fields->negativeScale->setVisible(false);
 			}
 
-			for (size_t i = 0; i < m_fields->buttons.size(); i++) {
-				m_fields->buttons[i]->setPositionX((18 / 0.15f) * i);
+			int i = 0;
+			for (auto node : CCArrayExt<CCNode*>(m_fields->menu->getChildren())) {
+				node->setPositionX((18 / 0.15f) * i);
+				i++;
 			}
 
 			if (const auto creatorInfoMenu = getChildByID("creator-info-menu")) {
