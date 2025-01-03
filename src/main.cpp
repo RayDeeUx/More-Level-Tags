@@ -18,6 +18,9 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		CCNode* negativeScale = nullptr;
 		CCNode* twoPointTwo = nullptr;
 		CCNode* twoPlayer = nullptr;
+		// TODO: STACKOVERFLOW TO COUNT OCCURRENCES
+		// `;1,<OBJECT_ID>,` fmt::format
+		// TODO: VIEW FUNGAL SHIFT TO FIND OCCURRENCES OF SUBSTRING
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
@@ -63,6 +66,19 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		cocos2d::CCSprite* sprite = CCSprite::createWithSpriteFrameName(frameName);
 		sprite->setScale(.5f);
 		return sprite;
+	}
+	int frequencyOfXInY(std::string&& pattern, const std::string& fullString) {
+		const auto patternSize = pattern.length();
+		const auto fullStringSize = fullString.length();
+		int result = 0;
+
+		for (int i = 0; i <= fullStringSize - patternSize; i++) {
+			int j;
+			for (j = 0; j < patternSize; j++) if (fullString[i + j] != pattern[j]) break;
+			if (j == patternSize) result++;
+		}
+
+		return result;
 	}
 	void onUpdate(cocos2d::CCObject* sender) {
 		m_fields->isRefreshing = true;
