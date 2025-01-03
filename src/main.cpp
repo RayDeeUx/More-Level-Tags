@@ -10,6 +10,9 @@ using namespace geode::prelude;
 class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	struct Fields {
 		CCNode* menu = nullptr;
+		CCNode* twoPlayer = nullptr;
+		CCNode* shaderAbuse = nullptr;
+		CCNode* cameraAbuse = nullptr;
 		CCNode* legacyShip = nullptr;
 		CCNode* legacyRobot = nullptr;
 		CCNode* startFlipped = nullptr;
@@ -17,7 +20,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		CCNode* multiRotate = nullptr;
 		CCNode* negativeScale = nullptr;
 		CCNode* twoPointTwo = nullptr;
-		CCNode* twoPlayer = nullptr;
 		// TODO: STACKOVERFLOW TO COUNT OCCURRENCES
 		// `;1,<OBJECT_ID>,` fmt::format
 		// TODO: VIEW FUNGAL SHIFT TO FIND OCCURRENCES OF SUBSTRING
@@ -27,6 +29,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	void hideTags(GJGameLevel* theLevel) {
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.empty() || m_fields->buttons.empty()) return;
+		if (m_fields->twoPlayer)
+			setXVisibleBasedOnY(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
 		if (m_fields->legacyShip)
 			setXVisibleBasedOnY(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
 		if (m_fields->legacyRobot)
@@ -41,8 +45,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			setXVisibleBasedOnY(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
 		if (m_fields->negativeScale)
 			setXVisibleBasedOnY(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
-		if (m_fields->twoPlayer)
-			setXVisibleBasedOnY(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
 	}
 	void setXVisibleBasedOnY(cocos2d::CCNode* node, bool condition) {
 		if (!node) return;
@@ -110,40 +112,51 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->menu->setVisible(false);
 		addChild(m_fields->menu);
 
-		auto ship = createTagSprite("portal_04_extra_2_001.png");
-		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->legacyShip, "legacy-ship"_spr);
-
-		auto robot = createTagSprite("portal_14_extra_2_001.png");
-		m_fields->legacyRobot = CircleButtonSprite::create(robot, CircleBaseColor::Pink, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->legacyRobot, "legacy-robot"_spr);
-
-		auto flip = createTagSprite("portal_02_extra_2_001.png");
-		m_fields->startFlipped = CircleButtonSprite::create(flip, CircleBaseColor::Pink, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->startFlipped, "flip-gravity"_spr);
-
-		auto height = createTagSprite("portal_19_extra_2_001.png");
-		m_fields->dynamicHeight = CircleButtonSprite::create(height, CircleBaseColor::Gray, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->dynamicHeight, "dynamic-height"_spr);
-
-		auto rotate = createTagSprite("edit_eRotateComBtn_001.png");
-		m_fields->multiRotate = CircleButtonSprite::create(rotate, CircleBaseColor::Gray, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->multiRotate, "multi-rotate"_spr);
-
-		auto tpt = createTagSprite("portal_18_extra_2_001.png");
-		m_fields->twoPointTwo = CircleButtonSprite::create(tpt, CircleBaseColor::Gray, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->twoPointTwo, "two-point-two"_spr);
-
-		auto negScale = createTagSprite("edit_eScaleComBtn_001.png");
-		m_fields->negativeScale = CircleButtonSprite::create(negScale, CircleBaseColor::Gray, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->negativeScale, "negative-scale"_spr);
-
-		auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
+		const auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
 		m_fields->twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 		pushBackAddChild(m_fields->twoPlayer, "two-player"_spr);
 
+		const auto shaderAbuse = CCSprite::createWithSpriteFrameName("shaderAbuse.png"_spr);
+		m_fields->shaderAbuse = CircleButtonSprite::create(shaderAbuse, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->shaderAbuse, "shader-abuse"_spr);
+
+		const auto cameraAbuse = CCSprite::createWithSpriteFrameName("cameraAbuse.png"_spr);
+		m_fields->cameraAbuse = CircleButtonSprite::create(cameraAbuse, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->cameraAbuse, "camera-abuse"_spr);
+
+		const auto ship = createTagSprite("portal_04_extra_2_001.png");
+		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->legacyShip, "legacy-ship"_spr);
+
+		const auto robot = createTagSprite("portal_14_extra_2_001.png");
+		m_fields->legacyRobot = CircleButtonSprite::create(robot, CircleBaseColor::Pink, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->legacyRobot, "legacy-robot"_spr);
+
+		const auto flip = createTagSprite("portal_02_extra_2_001.png");
+		m_fields->startFlipped = CircleButtonSprite::create(flip, CircleBaseColor::Pink, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->startFlipped, "flip-gravity"_spr);
+
+		const auto height = createTagSprite("portal_19_extra_2_001.png");
+		m_fields->dynamicHeight = CircleButtonSprite::create(height, CircleBaseColor::Gray, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->dynamicHeight, "dynamic-height"_spr);
+
+		const auto rotate = createTagSprite("edit_eRotateComBtn_001.png");
+		m_fields->multiRotate = CircleButtonSprite::create(rotate, CircleBaseColor::Gray, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->multiRotate, "multi-rotate"_spr);
+
+		const auto tpt = createTagSprite("portal_18_extra_2_001.png");
+		m_fields->twoPointTwo = CircleButtonSprite::create(tpt, CircleBaseColor::Gray, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->twoPointTwo, "two-point-two"_spr);
+
+		const auto negScale = createTagSprite("edit_eScaleComBtn_001.png");
+		m_fields->negativeScale = CircleButtonSprite::create(negScale, CircleBaseColor::Gray, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->negativeScale, "negative-scale"_spr);
+
 		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::hideTags(theLevel);
 		else {
+			if (m_fields->twoPlayer) pushBackMakeInvis(m_fields->twoPlayer);
+			if (m_fields->shaderAbuse) pushBackMakeInvis(m_fields->shaderAbuse);
+			if (m_fields->cameraAbuse) pushBackMakeInvis(m_fields->cameraAbuse);
 			if (m_fields->legacyShip) pushBackMakeInvis(m_fields->legacyShip);
 			if (m_fields->legacyRobot) pushBackMakeInvis(m_fields->legacyRobot);
 			if (m_fields->startFlipped) pushBackMakeInvis(m_fields->startFlipped);
@@ -151,7 +164,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			if (m_fields->multiRotate) pushBackMakeInvis(m_fields->multiRotate);
 			if (m_fields->twoPointTwo) pushBackMakeInvis(m_fields->twoPointTwo);
 			if (m_fields->negativeScale) pushBackMakeInvis(m_fields->negativeScale);
-			if (m_fields->twoPlayer) pushBackMakeInvis(m_fields->twoPlayer);
 		}
 
 		int i = 0;
@@ -181,6 +193,9 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				MyLevelInfoLayer::hideTags(theLevel);
 			}
 		} else {
+			if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
+			if (m_fields->shaderAbuse) m_fields->shaderAbuse->setVisible(false);
+			if (m_fields->cameraAbuse) m_fields->cameraAbuse->setVisible(false);
 			if (m_fields->legacyShip) m_fields->legacyShip->setVisible(false);
 			if (m_fields->legacyRobot) m_fields->legacyRobot->setVisible(false);
 			if (m_fields->startFlipped) m_fields->startFlipped->setVisible(false);
@@ -188,7 +203,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			if (m_fields->multiRotate) m_fields->multiRotate->setVisible(false);
 			if (m_fields->twoPointTwo) m_fields->twoPointTwo->setVisible(false);
 			if (m_fields->negativeScale) m_fields->negativeScale->setVisible(false);
-			if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
 		}
 
 		int i = 0;

@@ -47,7 +47,7 @@
 	"resources": {
 		"spritesheets": {
 			"OneSheet": [
-				"resources/2p.png"
+				"resources/*.png"
 			]
 		}
 	},
