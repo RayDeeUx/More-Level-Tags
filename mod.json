@@ -25,17 +25,17 @@
 			"default": false
 		},
 		"shaderAbuseTolerance": {
-			"name": "Shader Trigger Abuse Tolerance",
-			"description": "Adjust how many shader triggers <co>(regardless of type)</c> need to be used in a level in order to show the shader trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
+			"name": "Shader Trigger Tolerance",
+			"description": "Adjust how many shader triggers <co>(regardless of type)</c> need to be used in a level in order to show the shader trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely (as is done by default, because</c> <cr>detecting this information takes a REALLY long time on some levels</c> </cl>).</c>",
 			"type": "int",
-			"default": 0,
+			"default": -1,
 			"control": { "input": true }
 		},
 		"cameraAbuseTolerance": {
-			"name": "Camera Trigger Abuse Tolerance",
-			"description": "Adjust how many camera triggers <co>(regardless of type)</c> need to be used in a level in order to show the camera trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
+			"name": "Camera Trigger Tolerance",
+			"description": "Adjust how many camera triggers <co>(regardless of type)</c> need to be used in a level in order to show the camera trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely (as is done by default, because</c> <cr>detecting this information takes a REALLY long time on some levels</c> </cl>).</c>",
 			"type": "int",
-			"default": 0,
+			"default": -1,
 			"control": { "input": true }
 		}
 	},
