@@ -1,12 +1,12 @@
 {
-	"geode": "4.0.0-beta.1",
+	"geode": "4.0.1",
 	"gd": {
 		"win": "2.2074",
 		"mac": "2.2074",
 		"android": "2.2074"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
-	"version": "v1.3.3",
+	"version": "v1.3.4",
 	"name": "EvenMoreLevelTags",
 	"developers": ["TheSillyDoggo", "RayDeeUx"],
 	"description": "Adds even more level tags based on a level's traits.",
