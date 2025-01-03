@@ -51,6 +51,11 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->buttons.push_back(node);
 		node->setVisible(false);
 	}
+	static cocos2d::CCSprite* createTagSprite(const char* frameName) {
+		cocos2d::CCSprite* sprite = CCSprite::createWithSpriteFrameName(frameName);
+		sprite->setScale(.5f);
+		return sprite;
+	}
 	void onUpdate(cocos2d::CCObject* sender) {
 		m_fields->isRefreshing = true;
 		LevelInfoLayer::onUpdate(sender);
@@ -82,50 +87,43 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->menu->setVisible(false);
 		addChild(m_fields->menu);
 
-		auto ship = CCSprite::createWithSpriteFrameName("portal_04_extra_2_001.png");
-		ship->setScale(.5f);
+		auto ship = createTagSprite("portal_04_extra_2_001.png");
 		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
 		m_fields->legacyShip->setID("legacy-ship"_spr);
 		m_fields->buttons.push_back(m_fields->legacyShip);
 		m_fields->menu->addChild(m_fields->legacyShip);
 
-		auto robot = CCSprite::createWithSpriteFrameName("portal_14_extra_2_001.png");
-		robot->setScale(.5f);
+		auto robot = createTagSprite("portal_14_extra_2_001.png");
 		m_fields->legacyRobot = CircleButtonSprite::create(robot, CircleBaseColor::Pink, CircleBaseSize::Large);
 		m_fields->legacyRobot->setID("legacy-robot"_spr);
 		m_fields->buttons.push_back(m_fields->legacyRobot);
 		m_fields->menu->addChild(m_fields->legacyRobot);
 
-		auto flip = CCSprite::createWithSpriteFrameName("portal_02_extra_2_001.png");
-		flip->setScale(.5f);
+		auto flip = createTagSprite("portal_02_extra_2_001.png");
 		m_fields->startFlipped = CircleButtonSprite::create(flip, CircleBaseColor::Pink, CircleBaseSize::Large);
 		m_fields->startFlipped->setID("flip-gravity"_spr);
 		m_fields->buttons.push_back(m_fields->startFlipped);
 		m_fields->menu->addChild(m_fields->startFlipped);
 
-		auto height = CCSprite::createWithSpriteFrameName("portal_19_extra_2_001.png");
-		height->setScale(.5f);
+		auto height = createTagSprite("portal_19_extra_2_001.png");
 		m_fields->dynamicHeight = CircleButtonSprite::create(height, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->dynamicHeight->setID("dynamic-height"_spr);
 		m_fields->buttons.push_back(m_fields->dynamicHeight);
 		m_fields->menu->addChild(m_fields->dynamicHeight);
 
-		auto rotate = CCSprite::createWithSpriteFrameName("edit_eRotateComBtn_001.png");
-		rotate->setScale(.5f);
+		auto rotate = createTagSprite("edit_eRotateComBtn_001.png");
 		m_fields->multiRotate = CircleButtonSprite::create(rotate, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->multiRotate->setID("multi-rotate"_spr);
 		m_fields->buttons.push_back(m_fields->multiRotate);
 		m_fields->menu->addChild(m_fields->multiRotate);
 
-		auto tpt = CCSprite::createWithSpriteFrameName("portal_18_extra_2_001.png");
-		tpt->setScale(.5f);
+		auto tpt = createTagSprite("portal_18_extra_2_001.png");
 		m_fields->twoPointTwo = CircleButtonSprite::create(tpt, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->twoPointTwo->setID("two-point-two"_spr);
 		m_fields->buttons.push_back(m_fields->twoPointTwo);
 		m_fields->menu->addChild(m_fields->twoPointTwo);
 
-		auto negScale = CCSprite::createWithSpriteFrameName("edit_eScaleComBtn_001.png");
-		negScale->setScale(.5f);
+		auto negScale = createTagSprite("edit_eScaleComBtn_001.png");
 		m_fields->negativeScale = CircleButtonSprite::create(negScale, CircleBaseColor::Gray, CircleBaseSize::Large);
 		m_fields->negativeScale->setID("negative-scale"_spr);
 		m_fields->buttons.push_back(m_fields->negativeScale);
