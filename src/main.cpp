@@ -25,27 +25,31 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.empty() || m_fields->buttons.empty()) return;
 		if (m_fields->legacyShip)
-			judgementDay(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
+			setXVisibleBasedOnY(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
 		if (m_fields->legacyRobot)
-			judgementDay(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
+			setXVisibleBasedOnY(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
 		if (m_fields->startFlipped)
-			judgementDay(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
+			setXVisibleBasedOnY(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
 		if (m_fields->dynamicHeight)
-			judgementDay(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
+			setXVisibleBasedOnY(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
 		if (m_fields->multiRotate)
-			judgementDay(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
+			setXVisibleBasedOnY(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
 		if (m_fields->twoPointTwo)
-			judgementDay(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
+			setXVisibleBasedOnY(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
 		if (m_fields->negativeScale)
-			judgementDay(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
+			setXVisibleBasedOnY(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
 		if (m_fields->twoPlayer)
-			judgementDay(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
+			setXVisibleBasedOnY(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
 	}
-	void judgementDay(cocos2d::CCNode* node, bool condition) {
+	void setXVisibleBasedOnY(cocos2d::CCNode* node, bool condition) {
 		node->setVisible(condition);
 		if (node->isVisible()) return;
 		node->removeFromParent();
 		if (!m_fields->buttons.empty()) std::erase(m_fields->buttons, node);
+	}
+	void pushBackMakeInvis(cocos2d::CCNode* node) {
+		m_fields->buttons.push_back(node);
+		node->setVisible(false);
 	}
 	void onUpdate(cocos2d::CCObject* sender) {
 		m_fields->isRefreshing = true;
@@ -135,38 +139,14 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::hideTags(theLevel);
 		else {
-			if (m_fields->legacyShip) {
-				m_fields->buttons.push_back(m_fields->legacyShip);
-				m_fields->legacyShip->setVisible(false);
-			}
-			if (m_fields->legacyRobot) {
-				m_fields->buttons.push_back(m_fields->legacyRobot);
-				m_fields->legacyRobot->setVisible(false);
-			}
-			if (m_fields->startFlipped) {
-				m_fields->buttons.push_back(m_fields->startFlipped);
-				m_fields->startFlipped->setVisible(false);
-			}
-			if (m_fields->dynamicHeight) {
-				m_fields->buttons.push_back(m_fields->dynamicHeight);
-				m_fields->dynamicHeight->setVisible(false);
-			}
-			if (m_fields->multiRotate) {
-				m_fields->buttons.push_back(m_fields->multiRotate);
-				m_fields->multiRotate->setVisible(false);
-			}
-			if (m_fields->twoPointTwo) {
-				m_fields->buttons.push_back(m_fields->twoPointTwo);
-				m_fields->twoPointTwo->setVisible(false);
-			}
-			if (m_fields->negativeScale) {
-				m_fields->buttons.push_back(m_fields->negativeScale);
-				m_fields->negativeScale->setVisible(false);
-			}
-			if (m_fields->twoPlayer) {
-				m_fields->buttons.push_back(m_fields->twoPlayer);
-				m_fields->twoPlayer->setVisible(false);
-			}
+			if (m_fields->legacyShip) pushBackMakeInvis(m_fields->legacyShip);
+			if (m_fields->legacyRobot) pushBackMakeInvis(m_fields->legacyRobot);
+			if (m_fields->startFlipped) pushBackMakeInvis(m_fields->startFlipped);
+			if (m_fields->dynamicHeight) pushBackMakeInvis(m_fields->dynamicHeight);
+			if (m_fields->multiRotate) pushBackMakeInvis(m_fields->multiRotate);
+			if (m_fields->twoPointTwo) pushBackMakeInvis(m_fields->twoPointTwo);
+			if (m_fields->negativeScale) pushBackMakeInvis(m_fields->negativeScale);
+			if (m_fields->twoPlayer) pushBackMakeInvis(m_fields->twoPlayer);
 		}
 
 		int i = 0;
@@ -183,35 +163,39 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	virtual void levelDownloadFinished(GJGameLevel* theLevel) {
 		LevelInfoLayer::levelDownloadFinished(theLevel);
 
-		if (m_fields->menu) {
-			if (theLevel->m_levelString.size() > 1) {
-				if (!m_fields->isRefreshing) {
-					m_fields->menu->setVisible(false);
-					MyLevelInfoLayer::hideTags(theLevel);
-				}
-			} else {
-				if (m_fields->legacyShip) m_fields->legacyShip->setVisible(false);
-				if (m_fields->legacyRobot) m_fields->legacyRobot->setVisible(false);
-				if (m_fields->startFlipped) m_fields->startFlipped->setVisible(false);
-				if (m_fields->dynamicHeight) m_fields->dynamicHeight->setVisible(false);
-				if (m_fields->multiRotate) m_fields->multiRotate->setVisible(false);
-				if (m_fields->twoPointTwo) m_fields->twoPointTwo->setVisible(false);
-				if (m_fields->negativeScale) m_fields->negativeScale->setVisible(false);
-				if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
-			}
+		const auto creatorInfoMenu = getChildByID("creator-info-menu");
 
-			int i = 0;
-			for (auto node : CCArrayExt<CCNode*>(m_fields->menu->getChildren())) {
-				node->setPositionX((18 / 0.15f) * i);
-				i++;
-			}
-
-			if (const auto creatorInfoMenu = getChildByID("creator-info-menu")) {
-				m_fields->menu->setScale(0.15f);
-				m_fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenu->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
-				m_fields->menu->setVisible(true);
-			}
+		if (!m_fields->menu || !creatorInfoMenu) {
+			m_fields->isRefreshing = false;
+			return;
 		}
+
+		if (theLevel->m_levelString.size() > 1) {
+			if (!m_fields->isRefreshing) {
+				m_fields->menu->setVisible(false);
+				MyLevelInfoLayer::hideTags(theLevel);
+			}
+		} else {
+			if (m_fields->legacyShip) m_fields->legacyShip->setVisible(false);
+			if (m_fields->legacyRobot) m_fields->legacyRobot->setVisible(false);
+			if (m_fields->startFlipped) m_fields->startFlipped->setVisible(false);
+			if (m_fields->dynamicHeight) m_fields->dynamicHeight->setVisible(false);
+			if (m_fields->multiRotate) m_fields->multiRotate->setVisible(false);
+			if (m_fields->twoPointTwo) m_fields->twoPointTwo->setVisible(false);
+			if (m_fields->negativeScale) m_fields->negativeScale->setVisible(false);
+			if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
+		}
+
+		int i = 0;
+		for (auto node : CCArrayExt<CCNode*>(m_fields->menu->getChildren())) {
+			node->setPositionX((18 / 0.15f) * i);
+			i++;
+		}
+
+		m_fields->menu->setScale(0.15f);
+		m_fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenu->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
+		m_fields->menu->setVisible(true);
+
 		m_fields->isRefreshing = false;
 	}
 };
