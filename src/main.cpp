@@ -32,7 +32,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
-	void hideTags(GJGameLevel* theLevel) {
+	void hideTags(const GJGameLevel* theLevel) {
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.empty() || m_fields->buttons.empty()) return;
 		if (m_fields->twoPlayer)
@@ -170,7 +170,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		int i = 0;
 		for (auto node : CCArrayExt<CCNode*>(m_fields->menu->getChildren())) {
-			node->setPositionX((18 / 0.15f) * i);
+			node->setPositionX((18 / 0.15f) * static_cast<float>(i));
 			i++;
 		}
 
@@ -209,7 +209,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		int i = 0;
 		for (auto node : CCArrayExt<CCNode*>(m_fields->menu->getChildren())) {
-			node->setPositionX((18 / 0.15f) * i);
+			node->setPositionX((18 / 0.15f) * static_cast<float>(i));
 			i++;
 		}
 
