@@ -17,11 +17,12 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		CCNode* multiRotate = nullptr;
 		CCNode* negativeScale = nullptr;
 		CCNode* twoPointTwo = nullptr;
+		CCNode* twoPlayer = nullptr;
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
 	void hideTags(GJGameLevel* theLevel) {
-		if (m_fields->buttons.size() < 1) return;
+		if (m_fields->buttons.empty()) return;
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.size() > 1) {
 			if (m_fields->legacyShip) {
@@ -73,6 +74,13 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 					std::erase(m_fields->buttons, m_fields->negativeScale);
 				}
 			}
+			if (m_fields->twoPlayer) {
+				m_fields->twoPlayer->setVisible(theLevel->m_twoPlayerMode);
+				if (!m_fields->twoPlayer->isVisible()) {
+					m_fields->twoPlayer->removeFromParent();
+					std::erase(m_fields->buttons, m_fields->twoPlayer);
+				}
+			}
 		}
 	}
 	void onUpdate(cocos2d::CCObject* sender) {
@@ -102,7 +110,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->menu->setContentSize(ccp(0, 0));
 		m_fields->menu->setID("more-level-tags-menu"_spr);
 		m_fields->menu->setScale(0.15f);
-		m_fields->menu->setPosition(as<CCMenu*>(creatorInfoMenu)->getPosition() + ccp(as<CCMenu*>(creatorInfoMenu)->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
+		m_fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenu->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
 		m_fields->menu->setVisible(false);
 		addChild(m_fields->menu);
 
@@ -155,17 +163,14 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->buttons.push_back(m_fields->negativeScale);
 		m_fields->menu->addChild(m_fields->negativeScale);
 
-		if (theLevel->m_twoPlayerMode) {
-			auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
-			auto twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
-			twoPlayer->setID("two-player"_spr);
-			m_fields->menu->addChild(twoPlayer);
-			m_fields->buttons.push_back(twoPlayer);
-		}
+		auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
+		m_fields->twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
+		m_fields->twoPlayer->setID("two-player"_spr);
+		m_fields->buttons.push_back(m_fields->twoPlayer);
+		m_fields->menu->addChild(m_fields->twoPlayer);
 
-		if (theLevel->m_levelString.size() > 1) {
-			MyLevelInfoLayer::hideTags(theLevel);
-		} else {
+		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::hideTags(theLevel);
+		else {
 			if (m_fields->legacyShip) {
 				m_fields->buttons.push_back(m_fields->legacyShip);
 				m_fields->legacyShip->setVisible(false);
@@ -194,6 +199,10 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				m_fields->buttons.push_back(m_fields->negativeScale);
 				m_fields->negativeScale->setVisible(false);
 			}
+			if (m_fields->twoPlayer) {
+				m_fields->buttons.push_back(m_fields->twoPlayer);
+				m_fields->twoPlayer->setVisible(false);
+			}
 		}
 
 		int i = 0;
@@ -207,8 +216,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		return true;
 	}
 
-	virtual void levelDownloadFinished(GJGameLevel* theLevel)
-	{
+	virtual void levelDownloadFinished(GJGameLevel* theLevel) {
 		LevelInfoLayer::levelDownloadFinished(theLevel);
 
 		if (m_fields->menu) {
@@ -225,6 +233,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				if (m_fields->multiRotate) m_fields->multiRotate->setVisible(false);
 				if (m_fields->twoPointTwo) m_fields->twoPointTwo->setVisible(false);
 				if (m_fields->negativeScale) m_fields->negativeScale->setVisible(false);
+				if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
 			}
 
 			int i = 0;
@@ -235,7 +244,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 			if (const auto creatorInfoMenu = getChildByID("creator-info-menu")) {
 				m_fields->menu->setScale(0.15f);
-				m_fields->menu->setPosition(as<CCMenu*>(creatorInfoMenu)->getPosition() + ccp(as<CCMenu*>(creatorInfoMenu)->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
+				m_fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenu->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0), 7 + 1.6f) + ccp(5, 0));
 				m_fields->menu->setVisible(true);
 			}
 		}
