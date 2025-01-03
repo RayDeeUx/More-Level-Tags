@@ -1,4 +1,10 @@
 #include <Geode/modify/LevelInfoLayer.hpp>
+#include <regex>
+
+#define getInt Mod::get()->getSettingValue<int64_t>
+
+static const std::regex shaderAbuseRegex(R"(;1,(?:2904|2905|2907|2909|2910|2911|2912|2913|2914|2915|2916|2917|2919|2920|2921|2922|2923|2924),)");
+static const std::regex cameraAbuseRegex(R"(;1,(?:1913|1914|1916|2015|2016|2062|2901|2925),)");
 
 using namespace geode::prelude;
 
@@ -30,23 +36,27 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.empty() || m_fields->buttons.empty()) return;
 		if (m_fields->twoPlayer)
-			setXVisibleBasedOnY(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
+			setNodeVisibleBasedOnCondition(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
+		if (m_fields->twoPlayer)
+			setNodeVisibleBasedOnCondition(m_fields->shaderAbuse, getInt("shaderAbuseTolerance") > 0 && frequencyOfRegexPatternInString(shaderAbuseRegex, decomp) > getInt("shaderAbuseTolerance"));
+		if (m_fields->twoPlayer)
+			setNodeVisibleBasedOnCondition(m_fields->cameraAbuse, getInt("cameraAbuseTolerance") > 0 && frequencyOfRegexPatternInString(cameraAbuseRegex, decomp) > getInt("cameraAbuseTolerance"));
 		if (m_fields->legacyShip)
-			setXVisibleBasedOnY(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
+			setNodeVisibleBasedOnCondition(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
 		if (m_fields->legacyRobot)
-			setXVisibleBasedOnY(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
+			setNodeVisibleBasedOnCondition(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
 		if (m_fields->startFlipped)
-			setXVisibleBasedOnY(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
+			setNodeVisibleBasedOnCondition(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
 		if (m_fields->dynamicHeight)
-			setXVisibleBasedOnY(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
+			setNodeVisibleBasedOnCondition(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
 		if (m_fields->multiRotate)
-			setXVisibleBasedOnY(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
+			setNodeVisibleBasedOnCondition(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
 		if (m_fields->twoPointTwo)
-			setXVisibleBasedOnY(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
+			setNodeVisibleBasedOnCondition(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
 		if (m_fields->negativeScale)
-			setXVisibleBasedOnY(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
+			setNodeVisibleBasedOnCondition(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
 	}
-	void setXVisibleBasedOnY(cocos2d::CCNode* node, bool condition) {
+	void setNodeVisibleBasedOnCondition(cocos2d::CCNode* node, bool condition) {
 		if (!node) return;
 		node->setVisible(condition);
 		if (node->isVisible()) return;
@@ -69,18 +79,10 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		sprite->setScale(.5f);
 		return sprite;
 	}
-	int frequencyOfXInY(std::string&& pattern, const std::string& fullString) {
-		const auto patternSize = pattern.length();
-		const auto fullStringSize = fullString.length();
-		int result = 0;
-
-		for (int i = 0; i <= fullStringSize - patternSize; i++) {
-			int j;
-			for (j = 0; j < patternSize; j++) if (fullString[i + j] != pattern[j]) break;
-			if (j == patternSize) result++;
-		}
-
-		return result;
+	static long frequencyOfRegexPatternInString(const std::regex& pattern, const std::string& fullString) {
+		const auto start = std::sregex_iterator(fullString.begin(), fullString.end(), pattern);
+		const auto finish = std::sregex_iterator();
+		return std::distance(start, finish);
 	}
 	void onUpdate(cocos2d::CCObject* sender) {
 		m_fields->isRefreshing = true;
@@ -116,7 +118,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 		pushBackAddChild(m_fields->twoPlayer, "two-player"_spr);
 
-		const auto shaderAbuse = CCSprite::createWithSpriteFrameName("shaderAbuse.png"_spr);
+		const auto shaderAbuse = createTagSprite("edit_eShaderBtn_001.png");
 		m_fields->shaderAbuse = CircleButtonSprite::create(shaderAbuse, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
 		pushBackAddChild(m_fields->shaderAbuse, "shader-abuse"_spr);
 

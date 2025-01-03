@@ -23,6 +23,20 @@
 			"description": "Show level tags on levels under the RobsVault account.\n\n<cp>This is</c> <cr>NOT <cp>recommended,</c> <cy>as levels under the RobsVault account name will show EVERY level tag regardless of the level's traits.</c>",
 			"type": "bool",
 			"default": false
+		},
+		"shaderAbuseTolerance": {
+			"name": "Shader Trigger Abuse Tolerance",
+			"description": "Adjust how many shader triggers <co>(regardless of type)</c> need to be used in a level in order to show the shader trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
+			"type": "int",
+			"default": 0,
+			"control": { "input": true }
+		},
+		"cameraAbuseTolerance": {
+			"name": "Camera Trigger Abuse Tolerance",
+			"description": "Adjust how many camera triggers <co>(regardless of type)</c> need to be used in a level in order to show the camera trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
+			"type": "int",
+			"default": 0,
+			"control": { "input": true }
 		}
 	},
 	"dependencies": [
