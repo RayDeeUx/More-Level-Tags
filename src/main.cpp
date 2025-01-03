@@ -38,9 +38,9 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (m_fields->twoPlayer)
 			setNodeVisibleBasedOnCondition(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
 		if (m_fields->twoPlayer)
-			setNodeVisibleBasedOnCondition(m_fields->shaderAbuse, getInt("shaderAbuseTolerance") > 0 && frequencyOfRegexPatternInString(shaderAbuseRegex, decomp) > getInt("shaderAbuseTolerance"));
+			setNodeVisibleBasedOnCondition(m_fields->shaderAbuse, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderAbuseRegex, decomp) > getInt("shaderAbuseTolerance"));
 		if (m_fields->twoPlayer)
-			setNodeVisibleBasedOnCondition(m_fields->cameraAbuse, getInt("cameraAbuseTolerance") > 0 && frequencyOfRegexPatternInString(cameraAbuseRegex, decomp) > getInt("cameraAbuseTolerance"));
+			setNodeVisibleBasedOnCondition(m_fields->cameraAbuse, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraAbuseRegex, decomp) > getInt("cameraAbuseTolerance"));
 		if (m_fields->legacyShip)
 			setNodeVisibleBasedOnCondition(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
 		if (m_fields->legacyRobot)
