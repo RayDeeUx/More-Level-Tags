@@ -79,8 +79,9 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!LevelInfoLayer::init(theLevel, p1)) return false;
 		if (!Mod::get()->getSettingValue<bool>("enabled")) return true;
 
-		if (theLevel->m_levelType != GJLevelType::Saved || !getChildByIDRecursive("right-side-menu")->isVisible()) return true; // avoid false positives with robtop's levels
-		if (theLevel->m_accountID.value() == 19293579 && !Mod::get()->getSettingValue<bool>("robsVault")) return true;
+		int authorID = theLevel->m_accountID.value();
+		if (authorID == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) return true; // avoid false positives with robtop's levels
+		if (authorID == 19293579 && !Mod::get()->getSettingValue<bool>("robsVault")) return true;
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
 		if (!creatorInfoMenu) return true;
