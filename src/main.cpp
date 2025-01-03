@@ -22,66 +22,30 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		bool isRefreshing = false;
 	};
 	void hideTags(GJGameLevel* theLevel) {
-		if (m_fields->buttons.empty()) return;
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
-		if (decomp.size() > 1) {
-			if (m_fields->legacyShip) {
-				m_fields->legacyShip->setVisible(decomp.find("kA32,0") != std::string::npos);
-				if (!m_fields->legacyShip->isVisible()) {
-					m_fields->legacyShip->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->legacyShip);
-				}
-			}
-			if (m_fields->legacyRobot) {
-				m_fields->legacyRobot->setVisible(decomp.find("kA34,0") != std::string::npos);
-				if (!m_fields->legacyRobot->isVisible()) {
-					m_fields->legacyRobot->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->legacyRobot);
-				}
-			}
-			if (m_fields->startFlipped) {
-				m_fields->startFlipped->setVisible(decomp.find("kA11,1") != std::string::npos);
-				if (!m_fields->startFlipped->isVisible()) {
-					m_fields->startFlipped->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->startFlipped);
-				}
-			}
-			if (m_fields->dynamicHeight) {
-				m_fields->dynamicHeight->setVisible(decomp.find("kA37,0") != std::string::npos);
-				if (!m_fields->dynamicHeight->isVisible()) {
-					m_fields->dynamicHeight->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->dynamicHeight);
-				}
-			}
-			if (m_fields->multiRotate) {
-				m_fields->multiRotate->setVisible(decomp.find("kA27,0") != std::string::npos);
-				if (!m_fields->multiRotate->isVisible()) {
-					m_fields->multiRotate->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->multiRotate);
-				}
-			}
-			if (m_fields->twoPointTwo) {
-				m_fields->twoPointTwo->setVisible(decomp.find("kA40,0") != std::string::npos);
-				if (!m_fields->twoPointTwo->isVisible()) {
-					m_fields->twoPointTwo->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->twoPointTwo);
-				}
-			}
-			if (m_fields->negativeScale) {
-				m_fields->negativeScale->setVisible(decomp.find("kA33,0") != std::string::npos);
-				if (!m_fields->negativeScale->isVisible()) {
-					m_fields->negativeScale->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->negativeScale);
-				}
-			}
-			if (m_fields->twoPlayer) {
-				m_fields->twoPlayer->setVisible(theLevel->m_twoPlayerMode);
-				if (!m_fields->twoPlayer->isVisible()) {
-					m_fields->twoPlayer->removeFromParent();
-					std::erase(m_fields->buttons, m_fields->twoPlayer);
-				}
-			}
-		}
+		if (decomp.empty() || m_fields->buttons.empty()) return;
+		if (m_fields->legacyShip)
+			judgementDay(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
+		if (m_fields->legacyRobot)
+			judgementDay(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
+		if (m_fields->startFlipped)
+			judgementDay(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
+		if (m_fields->dynamicHeight)
+			judgementDay(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
+		if (m_fields->multiRotate)
+			judgementDay(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
+		if (m_fields->twoPointTwo)
+			judgementDay(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
+		if (m_fields->negativeScale)
+			judgementDay(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
+		if (m_fields->twoPlayer)
+			judgementDay(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
+	}
+	void judgementDay(cocos2d::CCNode* node, bool condition) {
+		node->setVisible(condition);
+		if (node->isVisible()) return;
+		node->removeFromParent();
+		if (!m_fields->buttons.empty()) std::erase(m_fields->buttons, node);
 	}
 	void onUpdate(cocos2d::CCObject* sender) {
 		m_fields->isRefreshing = true;
