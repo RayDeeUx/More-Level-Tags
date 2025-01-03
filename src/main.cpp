@@ -160,7 +160,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			return;
 		}
 
-		if (theLevel->m_levelString.size() > 1) {
+		if (!theLevel->m_levelString.empty()) {
 			if (!m_fields->isRefreshing) {
 				m_fields->menu->setVisible(false);
 				MyLevelInfoLayer::hideTags(theLevel);
