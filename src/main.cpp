@@ -42,14 +42,22 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			setXVisibleBasedOnY(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
 	}
 	void setXVisibleBasedOnY(cocos2d::CCNode* node, bool condition) {
+		if (!node) return;
 		node->setVisible(condition);
 		if (node->isVisible()) return;
 		node->removeFromParent();
 		if (!m_fields->buttons.empty()) std::erase(m_fields->buttons, node);
 	}
 	void pushBackMakeInvis(cocos2d::CCNode* node) {
+		if (!node) return;
 		m_fields->buttons.push_back(node);
 		node->setVisible(false);
+	}
+	void pushBackAddChild(cocos2d::CCNode* node, std::string&& id) {
+		if (!node || !m_fields->menu) return;
+		node->setID(id);
+		m_fields->buttons.push_back(node);
+		m_fields->menu->addChild(node);
 	}
 	static cocos2d::CCSprite* createTagSprite(const char* frameName) {
 		cocos2d::CCSprite* sprite = CCSprite::createWithSpriteFrameName(frameName);
@@ -89,51 +97,35 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		auto ship = createTagSprite("portal_04_extra_2_001.png");
 		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
-		m_fields->legacyShip->setID("legacy-ship"_spr);
-		m_fields->buttons.push_back(m_fields->legacyShip);
-		m_fields->menu->addChild(m_fields->legacyShip);
+		pushBackAddChild(m_fields->legacyShip, "legacy-ship"_spr);
 
 		auto robot = createTagSprite("portal_14_extra_2_001.png");
 		m_fields->legacyRobot = CircleButtonSprite::create(robot, CircleBaseColor::Pink, CircleBaseSize::Large);
-		m_fields->legacyRobot->setID("legacy-robot"_spr);
-		m_fields->buttons.push_back(m_fields->legacyRobot);
-		m_fields->menu->addChild(m_fields->legacyRobot);
+		pushBackAddChild(m_fields->legacyRobot, "legacy-robot"_spr);
 
 		auto flip = createTagSprite("portal_02_extra_2_001.png");
 		m_fields->startFlipped = CircleButtonSprite::create(flip, CircleBaseColor::Pink, CircleBaseSize::Large);
-		m_fields->startFlipped->setID("flip-gravity"_spr);
-		m_fields->buttons.push_back(m_fields->startFlipped);
-		m_fields->menu->addChild(m_fields->startFlipped);
+		pushBackAddChild(m_fields->startFlipped, "flip-gravity"_spr);
 
 		auto height = createTagSprite("portal_19_extra_2_001.png");
 		m_fields->dynamicHeight = CircleButtonSprite::create(height, CircleBaseColor::Gray, CircleBaseSize::Large);
-		m_fields->dynamicHeight->setID("dynamic-height"_spr);
-		m_fields->buttons.push_back(m_fields->dynamicHeight);
-		m_fields->menu->addChild(m_fields->dynamicHeight);
+		pushBackAddChild(m_fields->dynamicHeight, "dynamic-height"_spr);
 
 		auto rotate = createTagSprite("edit_eRotateComBtn_001.png");
 		m_fields->multiRotate = CircleButtonSprite::create(rotate, CircleBaseColor::Gray, CircleBaseSize::Large);
-		m_fields->multiRotate->setID("multi-rotate"_spr);
-		m_fields->buttons.push_back(m_fields->multiRotate);
-		m_fields->menu->addChild(m_fields->multiRotate);
+		pushBackAddChild(m_fields->multiRotate, "multi-rotate"_spr);
 
 		auto tpt = createTagSprite("portal_18_extra_2_001.png");
 		m_fields->twoPointTwo = CircleButtonSprite::create(tpt, CircleBaseColor::Gray, CircleBaseSize::Large);
-		m_fields->twoPointTwo->setID("two-point-two"_spr);
-		m_fields->buttons.push_back(m_fields->twoPointTwo);
-		m_fields->menu->addChild(m_fields->twoPointTwo);
+		pushBackAddChild(m_fields->twoPointTwo, "two-point-two"_spr);
 
 		auto negScale = createTagSprite("edit_eScaleComBtn_001.png");
 		m_fields->negativeScale = CircleButtonSprite::create(negScale, CircleBaseColor::Gray, CircleBaseSize::Large);
-		m_fields->negativeScale->setID("negative-scale"_spr);
-		m_fields->buttons.push_back(m_fields->negativeScale);
-		m_fields->menu->addChild(m_fields->negativeScale);
+		pushBackAddChild(m_fields->negativeScale, "negative-scale"_spr);
 
 		auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
 		m_fields->twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
-		m_fields->twoPlayer->setID("two-player"_spr);
-		m_fields->buttons.push_back(m_fields->twoPlayer);
-		m_fields->menu->addChild(m_fields->twoPlayer);
+		pushBackAddChild(m_fields->twoPlayer, "two-player"_spr);
 
 		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::hideTags(theLevel);
 		else {
