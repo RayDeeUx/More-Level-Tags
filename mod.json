@@ -20,7 +20,7 @@
 		},
 		"robsVault": {
 			"name": "Enable for RobsVault",
-			"description": "Show level tags on levels under the RobsVault account.\n\n<cp>This is</c> <cr>NOT <cp>recommended,</c> <cy>as levels under the RobsVault account name will show EVERY level tag regardless of the level's traits.</c>",
+			"description": "Show level tags on levels under the RobsVault account.\n\n<cp>This is</c> <cr>NOT</c> <cp>recommended,</c> <cy>as levels under the RobsVault account name will show EVERY level tag regardless of the level's traits.</c>",
 			"type": "bool",
 			"default": false
 		},
