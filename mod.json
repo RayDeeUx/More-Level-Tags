@@ -33,7 +33,7 @@
 		},
 		"advancedShaderAbuseTolerance": {
 			"name": "Advanced Shader Trigger Intolerance Counter",
-			"description": "When determining if a level should display the <cl>shader trigger intolerance tag</c>, use the <co>total number</c> <cl>of shader triggers</c> used in a level <cy>[Example: 3 Grayscale, 28 Shock Wave, 10 Sepia]</c> instead of the <co>total types</c> <cl>of shader triggers</c> used in a level <cy>[Example: Grayscale, Shock Wave, Sepia]</c>.\n\n<cy>Detecting this information takes a</c> <cr>REALLY</c> <cy>long time on larger levels such as</c> <cl>EverAfter by Galofuf</c><cy>, so enabling this is</c> <cr>HIGHLY DISCOURAGED</c><cy>.</c>",
+			"description": "When determining if a level should display the <cl>shader trigger intolerance tag</c>, use the <co>total number</c> <cl>of shader triggers</c> used in a level <cy>[Example: 3 Grayscale, 28 Shock Wave, 10 Sepia for a total of</c> <co>41</c><cy>]</c> instead of the <co>total types</c> <cl>of shader triggers</c> used in a level <cy>[Example: Grayscale, Shock Wave, Sepia for a total of</c> <co>3</c><cy>]</c>.\n\n<cy>Detecting the</c> <co>total number</c> <cl>of shader triggers</c> <cy>takes a</c> <cr>REALLY</c> <cy>long time on larger levels such as</c> <cl>EverAfter by Galofuf</c><cy>, so enabling this is</c> <cr>HIGHLY DISCOURAGED</c> <cy>and should be reserved for the likes of NASA supercomputers.</c>",
 			"type": "bool",
 			"default": false
 		},
@@ -46,7 +46,7 @@
 		},
 		"advancedCameraAbuseTolerance": {
 			"name": "Advanced Camera Trigger Intolerance Counter",
-			"description": "When determining if a level should display the <cl>camera trigger intolerance tag</c>, use the <co>total number</c> <cl>of camera triggers</c> used in a level <cy>[Example: 32 Static, 878 Rotate, 95 Zoom]</c> instead of the <co>total types</c> <cl>of shader triggers</c> used in a level <cy>[Example: Static, Rotate, Zoom]</c>.\n\n<cy>Detecting this information takes a</c> <cr>REALLY</c> <cy>long time on larger levels such as</c> <cl>EverAfter by Galofuf</c><cy>, so enabling this is</c> <cr>HIGHLY DISCOURAGED</c><cy>.</c>",
+			"description": "When determining if a level should display the <cl>camera trigger intolerance tag</c>, use the <co>total number</c> <cl>of camera triggers</c> used in a level <cy>[Example: 32 Static, 878 Rotate, 95 Zoom for a total of</c> <co>1005</c><cy>]</c> instead of the <co>total types</c> <cl>of shader triggers</c> used in a level <cy>[Example: Static, Rotate, Zoom for a total of</c> <co>3</c><cy>]</c>.\n\n<cy>Detecting the</c> <co>total number</c> <cl>of camera triggers</c> <cy>takes a</c> <cr>REALLY</c> <cy>long time on larger levels such as</c> <cl>EverAfter by Galofuf</c><cy>, so enabling this is</c> <cr>HIGHLY DISCOURAGED</c> <cy>and should be reserved for the likes of NASA supercomputers.</c>",
 			"type": "bool",
 			"default": false
 		}
