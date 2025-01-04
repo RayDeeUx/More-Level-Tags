@@ -1,6 +1,10 @@
 # EvenMoreLevelTags Changelog
-## v1.3.4
-- Something.
+## v1.4.0
+- Fix that one longstanding bug where the level tags would go offscreen when downloading a level for the first time.
+- Added two additional tags: <cl>Shader Intolerance</c> and <cl>Camera Intolerance</c>.
+  - Adjust your <cl>Shader Intolerance</c> and <cl>Camera Intolerance</c> thresholds separately in mod settings. Fully disable the intolerance tags by setting each threshold to a(ny) negative number.
+  - Enable <cr>Advanced Tolerance Counter</c> if you'd like to fine-tune the requirements for showing these tags. <cr>(This red highlight should make it clear[er] that doing so is not recommended.)</c>
+  - These will be the only "toggleable" tags.
 ## v1.3.3
 - Port to 2.2074.
 ## v1.3.2
