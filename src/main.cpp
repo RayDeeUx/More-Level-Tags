@@ -38,12 +38,14 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (decomp.empty() || m_fields->buttons.empty()) return;
 		if (m_fields->twoPlayer)
 			setNodeVisibleBasedOnCondition(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
-		if (m_fields->shaderIntolerance)
-			if (getBool("advancedShaderAbuseTolerance")) setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, decomp) > getInt("shaderAbuseTolerance"));
-			else setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, decomp) > getInt("shaderAbuseTolerance"));
-		if (m_fields->cameraIntolerance)
-			if (getBool("advancedCameraAbuseTolerance")) setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, decomp) > getInt("cameraAbuseTolerance"));
-			else setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, decomp) > getInt("cameraAbuseTolerance"));
+		if (m_fields->shaderIntolerance) {
+			if (getBool("advancedShaderAbuseTolerance")) { setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, decomp) > getInt("shaderAbuseTolerance")); }
+			else { setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, decomp) > getInt("shaderAbuseTolerance")); }
+		}
+		if (m_fields->cameraIntolerance) {
+			if (getBool("advancedCameraAbuseTolerance")) { setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, decomp) > getInt("cameraAbuseTolerance")); }
+			else { setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, decomp) > getInt("cameraAbuseTolerance")); }
+		}
 		if (m_fields->legacyShip)
 			setNodeVisibleBasedOnCondition(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
 		if (m_fields->legacyRobot)
