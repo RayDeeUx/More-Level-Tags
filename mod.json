@@ -26,17 +26,29 @@
 		},
 		"shaderAbuseTolerance": {
 			"name": "Shader Trigger Tolerance",
-			"description": "Adjust how many shader triggers <co>(regardless of type)</c> need to be used in a level in order to show the shader trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely (as is done by default, because</c> <cr>detecting this information takes a REALLY long time on some levels</c> </cl>).</c>",
+			"description": "Adjust how many shader triggers <co>(regardless of type)</c> need to be included in a level in order to show the shader trigger (in)tolerance tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
 			"type": "int",
-			"default": -1,
+			"default": 5,
 			"control": { "input": true }
+		},
+		"advancedShaderAbuseTolerance": {
+			"name": "Advanced Shader Trigger Tolerance Counter",
+			"description": "When determining if a level should display the <cl>shader trigger (in)tolerance tag</c>, use the <co>total number</c> <cl>of shader triggers</c> used in a level <cy>[Example: 3 Grayscale, 28 Shock Wave, 10 Sepia]</c> instead of the <co>total types</c> <cl>of shader triggers</c> used in a level <cy>[Example: Grayscale, Shock Wave, Sepia]</c>.\n\n<cy>Detecting this information takes a</c> <cr>REALLY</c> <cy>long time on larger levels such as</c> <cl>EverAfter by Galofuf</c><cy>, so enabling this is</c> <cr>HIGHLY DISCOURAGED</c><cy>.</c>",
+			"type": "bool",
+			"default": false
 		},
 		"cameraAbuseTolerance": {
 			"name": "Camera Trigger Tolerance",
-			"description": "Adjust how many camera triggers <co>(regardless of type)</c> need to be used in a level in order to show the camera trigger abuse tag.\n\n<cl>You can set this to a negative number to disable the tag entirely (as is done by default, because</c> <cr>detecting this information takes a REALLY long time on some levels</c> </cl>).</c>",
+			"description": "Adjust how many camera triggers <co>(regardless of type)</c> need to be included in a level in order to show the camera trigger (in)tolerance tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
 			"type": "int",
-			"default": -1,
+			"default": 5,
 			"control": { "input": true }
+		},
+		"advancedCameraAbuseTolerance": {
+			"name": "Advanced Camera Trigger Tolerance Counter",
+			"description": "When determining if a level should display the <cl>camera trigger (in)tolerance tag</c>, use the <co>total number</c> <cl>of camera triggers</c> used in a level <cy>[Example: 32 Static, 878 Rotate, 95 Zoom]</c> instead of the <co>total types</c> <cl>of shader triggers</c> used in a level <cy>[Example: Static, Rotate, Zoom]</c>.\n\n<cy>Detecting this information takes a</c> <cr>REALLY</c> <cy>long time on larger levels such as</c> <cl>EverAfter by Galofuf</c><cy>, so enabling this is</c> <cr>HIGHLY DISCOURAGED</c><cy>.</c>",
+			"type": "bool",
+			"default": false
 		}
 	},
 	"dependencies": [

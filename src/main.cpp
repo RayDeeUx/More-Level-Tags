@@ -2,9 +2,13 @@
 #include <regex>
 
 #define getInt Mod::get()->getSettingValue<int64_t>
+#define getBool Mod::get()->getSettingValue<bool>
 
-static const std::regex shaderAbuseRegex(R"(;1,(?:2904|2905|2907|2909|2910|2911|2912|2913|2914|2915|2916|2917|2919|2920|2921|2922|2923|2924),)");
-static const std::regex cameraAbuseRegex(R"(;1,(?:1913|1914|1916|2015|2016|2062|2901|2925),)");
+static const std::regex shaderIntoleranceRegex(R"(;1,(?:2904|2905|2907|2909|2910|2911|2912|2913|2914|2915|2916|2917|2919|2920|2921|2922|2923|2924),)");
+static const std::regex cameraIntoleranceRegex(R"(;1,(?:1913|1914|1916|2015|2016|2062|2901|2925),)");
+
+static const std::vector<int> shaderIntoleranceVector = {2904, 2905, 2907, 2909, 2910, 2911, 2912, 2913, 2914, 2915, 2916, 2917, 2919, 2920, 2921, 2922, 2923, 2924};
+static const std::vector<int> cameraIntoleranceVector = {1913, 1914, 1916, 2015, 2016, 2062, 2901, 2925};
 
 using namespace geode::prelude;
 
@@ -17,8 +21,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 	struct Fields {
 		CCNode* menu = nullptr;
 		CCNode* twoPlayer = nullptr;
-		CCNode* shaderAbuse = nullptr;
-		CCNode* cameraAbuse = nullptr;
+		CCNode* shaderIntolerance = nullptr;
+		CCNode* cameraIntolerance = nullptr;
 		CCNode* legacyShip = nullptr;
 		CCNode* legacyRobot = nullptr;
 		CCNode* startFlipped = nullptr;
@@ -26,9 +30,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		CCNode* multiRotate = nullptr;
 		CCNode* negativeScale = nullptr;
 		CCNode* twoPointTwo = nullptr;
-		// TODO: STACKOVERFLOW TO COUNT OCCURRENCES
-		// `;1,<OBJECT_ID>,` fmt::format
-		// TODO: VIEW FUNGAL SHIFT TO FIND OCCURRENCES OF SUBSTRING
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
@@ -37,10 +38,12 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (decomp.empty() || m_fields->buttons.empty()) return;
 		if (m_fields->twoPlayer)
 			setNodeVisibleBasedOnCondition(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
-		if (m_fields->twoPlayer)
-			setNodeVisibleBasedOnCondition(m_fields->shaderAbuse, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderAbuseRegex, decomp) > getInt("shaderAbuseTolerance"));
-		if (m_fields->twoPlayer)
-			setNodeVisibleBasedOnCondition(m_fields->cameraAbuse, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraAbuseRegex, decomp) > getInt("cameraAbuseTolerance"));
+		if (m_fields->shaderIntolerance)
+			if (getBool("advancedShaderAbuseTolerance")) setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, decomp) > getInt("shaderAbuseTolerance"));
+			else setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, decomp) > getInt("shaderAbuseTolerance"));
+		if (m_fields->cameraIntolerance)
+			if (getBool("advancedCameraAbuseTolerance")) setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, decomp) > getInt("cameraAbuseTolerance"));
+			else setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, decomp) > getInt("cameraAbuseTolerance"));
 		if (m_fields->legacyShip)
 			setNodeVisibleBasedOnCondition(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
 		if (m_fields->legacyRobot)
@@ -79,10 +82,15 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		sprite->setScale(.5f);
 		return sprite;
 	}
-	static long frequencyOfRegexPatternInString(const std::regex& pattern, const std::string& fullString) {
-		const auto start = std::sregex_iterator(fullString.begin(), fullString.end(), pattern);
+	static long frequencyOfRegexPatternInString(const std::regex& pattern, const std::string& levelString) {
+		const auto start = std::sregex_iterator(levelString.begin(), levelString.end(), pattern);
 		const auto finish = std::sregex_iterator();
 		return std::distance(start, finish);
+	}
+	static int useVectorToFindFrequency(const std::vector<int>& vector, const std::string& levelString) {
+		int result = 0;
+		for (int i : vector) if (utils::string::contains(levelString, fmt::format(";1,{},", i))) result += 1;
+		return result;
 	}
 	void onUpdate(cocos2d::CCObject* sender) {
 		m_fields->isRefreshing = true;
@@ -97,11 +105,11 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!m_fields->buttons.empty()) m_fields->buttons.clear();
 
 		if (!LevelInfoLayer::init(theLevel, p1)) return false;
-		if (!Mod::get()->getSettingValue<bool>("enabled")) return true;
+		if (!getBool("enabled")) return true;
 
 		int authorID = theLevel->m_accountID.value();
 		if (authorID == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) return true; // avoid false positives with robtop's levels
-		if (authorID == 19293579 && !Mod::get()->getSettingValue<bool>("robsVault")) return true;
+		if (authorID == 19293579 && !getBool("robsVault")) return true;
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
 		if (!creatorInfoMenu) return true;
@@ -118,13 +126,13 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
 		pushBackAddChild(m_fields->twoPlayer, "two-player"_spr);
 
-		const auto shaderAbuse = createTagSprite("edit_eShaderBtn_001.png");
-		m_fields->shaderAbuse = CircleButtonSprite::create(shaderAbuse, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->shaderAbuse, "shader-abuse"_spr);
+		const auto shaderIntolerance = createTagSprite("edit_eShaderBtn_001.png");
+		m_fields->shaderIntolerance = CircleButtonSprite::create(shaderIntolerance, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->shaderIntolerance, "shader-intolerance"_spr);
 
-		const auto cameraAbuse = CCSprite::createWithSpriteFrameName("cameraAbuse.png"_spr);
-		m_fields->cameraAbuse = CircleButtonSprite::create(cameraAbuse, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
-		pushBackAddChild(m_fields->cameraAbuse, "camera-abuse"_spr);
+		const auto cameraIntolerance = CCSprite::createWithSpriteFrameName("cameraIntolerance.png"_spr);
+		m_fields->cameraIntolerance = CircleButtonSprite::create(cameraIntolerance, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
+		pushBackAddChild(m_fields->cameraIntolerance, "camera-intolerance"_spr);
 
 		const auto ship = createTagSprite("portal_04_extra_2_001.png");
 		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
@@ -157,8 +165,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::hideTags(theLevel);
 		else {
 			if (m_fields->twoPlayer) pushBackMakeInvis(m_fields->twoPlayer);
-			if (m_fields->shaderAbuse) pushBackMakeInvis(m_fields->shaderAbuse);
-			if (m_fields->cameraAbuse) pushBackMakeInvis(m_fields->cameraAbuse);
+			if (m_fields->shaderIntolerance) pushBackMakeInvis(m_fields->shaderIntolerance);
+			if (m_fields->cameraIntolerance) pushBackMakeInvis(m_fields->cameraIntolerance);
 			if (m_fields->legacyShip) pushBackMakeInvis(m_fields->legacyShip);
 			if (m_fields->legacyRobot) pushBackMakeInvis(m_fields->legacyRobot);
 			if (m_fields->startFlipped) pushBackMakeInvis(m_fields->startFlipped);
@@ -196,8 +204,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			}
 		} else {
 			if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
-			if (m_fields->shaderAbuse) m_fields->shaderAbuse->setVisible(false);
-			if (m_fields->cameraAbuse) m_fields->cameraAbuse->setVisible(false);
+			if (m_fields->shaderIntolerance) m_fields->shaderIntolerance->setVisible(false);
+			if (m_fields->cameraIntolerance) m_fields->cameraIntolerance->setVisible(false);
 			if (m_fields->legacyShip) m_fields->legacyShip->setVisible(false);
 			if (m_fields->legacyRobot) m_fields->legacyRobot->setVisible(false);
 			if (m_fields->startFlipped) m_fields->startFlipped->setVisible(false);
