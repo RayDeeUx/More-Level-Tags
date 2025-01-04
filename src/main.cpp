@@ -34,35 +34,25 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		std::vector<CCNode*> buttons = {};
 		bool isRefreshing = false;
 	};
-	void hideTags(const GJGameLevel* theLevel) {
+	void displayTags(const GJGameLevel* theLevel) {
 		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
 		if (decomp.empty() || m_fields->buttons.empty()) return;
-		if (m_fields->twoPlayer)
-			setNodeVisibleBasedOnCondition(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
-		if (m_fields->shaderIntolerance) {
-			if (getBool("advancedShaderAbuseTolerance")) { setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, decomp) > getInt("shaderAbuseTolerance")); }
-			else { setNodeVisibleBasedOnCondition(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, decomp) > getInt("shaderAbuseTolerance")); }
-		}
-		if (m_fields->cameraIntolerance) {
-			if (getBool("advancedCameraAbuseTolerance")) { setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, decomp) > getInt("cameraAbuseTolerance")); }
-			else { setNodeVisibleBasedOnCondition(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, decomp) > getInt("cameraAbuseTolerance")); }
-		}
-		if (m_fields->legacyShip)
-			setNodeVisibleBasedOnCondition(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
-		if (m_fields->legacyRobot)
-			setNodeVisibleBasedOnCondition(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
-		if (m_fields->startFlipped)
-			setNodeVisibleBasedOnCondition(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
-		if (m_fields->dynamicHeight)
-			setNodeVisibleBasedOnCondition(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
-		if (m_fields->multiRotate)
-			setNodeVisibleBasedOnCondition(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
-		if (m_fields->twoPointTwo)
-			setNodeVisibleBasedOnCondition(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
-		if (m_fields->negativeScale)
-			setNodeVisibleBasedOnCondition(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
+		displayTagIf(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
+		if (getBool("advancedShaderAbuseTolerance"))
+			displayTagIf(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, decomp) > getInt("shaderAbuseTolerance"));
+		else displayTagIf(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, decomp) > getInt("shaderAbuseTolerance"));
+		if (getBool("advancedCameraAbuseTolerance"))
+			displayTagIf(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, decomp) > getInt("cameraAbuseTolerance"));
+		else displayTagIf(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, decomp) > getInt("cameraAbuseTolerance"));
+		displayTagIf(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
+		displayTagIf(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
+		displayTagIf(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
+		displayTagIf(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
+		displayTagIf(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
+		displayTagIf(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
+		displayTagIf(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
 	}
-	void setNodeVisibleBasedOnCondition(cocos2d::CCNode* node, bool condition) {
+	void displayTagIf(cocos2d::CCNode* node, const bool condition) {
 		if (!node) return;
 		node->setVisible(condition);
 		if (node->isVisible()) return;
@@ -80,15 +70,13 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->buttons.push_back(node);
 		m_fields->menu->addChild(node);
 	}
-	static cocos2d::CCSprite* createTagSprite(const char* frameName) {
-		cocos2d::CCSprite* sprite = CCSprite::createWithSpriteFrameName(frameName);
-		sprite->setScale(.5f);
-		return sprite;
+	static cocos2d::CCSprite* createTagSprite(std::string&& frameName, const CircleBaseColor color) {
+		cocos2d::CCSprite* sprite = CCSprite::createWithSpriteFrameName(frameName.c_str());
+		if (!utils::string::contains(frameName, Mod::get()->getID())) sprite->setScale(.5f);
+		return CircleButtonSprite::create(sprite, color, CircleBaseSize::Large);
 	}
 	static long frequencyOfRegexPatternInString(const std::regex& pattern, const std::string& levelString) {
-		const auto start = std::sregex_iterator(levelString.begin(), levelString.end(), pattern);
-		const auto finish = std::sregex_iterator();
-		return std::distance(start, finish);
+		return std::distance(std::sregex_iterator(levelString.begin(), levelString.end(), pattern), std::sregex_iterator());
 	}
 	static int useVectorToFindFrequency(const std::vector<int>& vector, const std::string& levelString) {
 		int result = 0;
@@ -110,9 +98,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!LevelInfoLayer::init(theLevel, p1)) return false;
 		if (!getBool("enabled")) return true;
 
-		int authorID = theLevel->m_accountID.value();
-		if (authorID == 71 && !getChildByIDRecursive("right-side-menu")->isVisible()) return true; // avoid false positives with robtop's levels
-		if (authorID == 19293579 && !getBool("robsVault")) return true;
+		if (theLevel->m_levelID.value() < 129) return true; // avoid false positives with robtop's levels
+		if (theLevel->m_accountID.value() == 19293579 && !getBool("robsVault")) return true;
 
 		auto creatorInfoMenu = getChildByID("creator-info-menu");
 		if (!creatorInfoMenu) return true;
@@ -125,58 +112,48 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		m_fields->menu->setVisible(false);
 		addChild(m_fields->menu);
 
-		const auto cube = CCSprite::createWithSpriteFrameName("2p.png"_spr);
-		m_fields->twoPlayer = CircleButtonSprite::create(cube, CircleBaseColor::Pink, CircleBaseSize::Large);
+		m_fields->twoPlayer = createTagSprite("2p.png"_spr, CircleBaseColor::Pink);
 		pushBackAddChild(m_fields->twoPlayer, "two-player"_spr);
 
-		const auto shaderIntolerance = createTagSprite("edit_eShaderBtn_001.png");
-		m_fields->shaderIntolerance = CircleButtonSprite::create(shaderIntolerance, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
+		m_fields->shaderIntolerance = createTagSprite("edit_eShaderBtn_001.png", CircleBaseColor::DarkPurple);
 		pushBackAddChild(m_fields->shaderIntolerance, "shader-intolerance"_spr);
 
-		const auto cameraIntolerance = CCSprite::createWithSpriteFrameName("cameraIntolerance.png"_spr);
-		m_fields->cameraIntolerance = CircleButtonSprite::create(cameraIntolerance, CircleBaseColor::DarkPurple, CircleBaseSize::Large);
+		m_fields->cameraIntolerance = createTagSprite("cameraIntolerance.png"_spr, CircleBaseColor::DarkPurple);
 		pushBackAddChild(m_fields->cameraIntolerance, "camera-intolerance"_spr);
 
-		const auto ship = createTagSprite("portal_04_extra_2_001.png");
-		m_fields->legacyShip = CircleButtonSprite::create(ship, CircleBaseColor::Cyan, CircleBaseSize::Large);
+		m_fields->legacyShip = createTagSprite("portal_04_extra_2_001.png", CircleBaseColor::Cyan);
 		pushBackAddChild(m_fields->legacyShip, "legacy-ship"_spr);
 
-		const auto robot = createTagSprite("portal_14_extra_2_001.png");
-		m_fields->legacyRobot = CircleButtonSprite::create(robot, CircleBaseColor::Pink, CircleBaseSize::Large);
+		m_fields->legacyRobot = createTagSprite("portal_14_extra_2_001.png", CircleBaseColor::Pink);
 		pushBackAddChild(m_fields->legacyRobot, "legacy-robot"_spr);
 
-		const auto flip = createTagSprite("portal_02_extra_2_001.png");
-		m_fields->startFlipped = CircleButtonSprite::create(flip, CircleBaseColor::Pink, CircleBaseSize::Large);
+		m_fields->startFlipped = createTagSprite("portal_02_extra_2_001.png", CircleBaseColor::Pink);
 		pushBackAddChild(m_fields->startFlipped, "flip-gravity"_spr);
 
-		const auto height = createTagSprite("portal_19_extra_2_001.png");
-		m_fields->dynamicHeight = CircleButtonSprite::create(height, CircleBaseColor::Gray, CircleBaseSize::Large);
+		m_fields->dynamicHeight = createTagSprite("portal_19_extra_2_001.png", CircleBaseColor::Gray);
 		pushBackAddChild(m_fields->dynamicHeight, "dynamic-height"_spr);
 
-		const auto rotate = createTagSprite("edit_eRotateComBtn_001.png");
-		m_fields->multiRotate = CircleButtonSprite::create(rotate, CircleBaseColor::Gray, CircleBaseSize::Large);
+		m_fields->multiRotate = createTagSprite("edit_eRotateComBtn_001.png", CircleBaseColor::Gray);
 		pushBackAddChild(m_fields->multiRotate, "multi-rotate"_spr);
 
-		const auto tpt = createTagSprite("portal_18_extra_2_001.png");
-		m_fields->twoPointTwo = CircleButtonSprite::create(tpt, CircleBaseColor::Gray, CircleBaseSize::Large);
+		m_fields->twoPointTwo = createTagSprite("portal_18_extra_2_001.png", CircleBaseColor::Gray);
 		pushBackAddChild(m_fields->twoPointTwo, "two-point-two"_spr);
 
-		const auto negScale = createTagSprite("edit_eScaleComBtn_001.png");
-		m_fields->negativeScale = CircleButtonSprite::create(negScale, CircleBaseColor::Gray, CircleBaseSize::Large);
+		m_fields->negativeScale = createTagSprite("edit_eScaleComBtn_001.png", CircleBaseColor::Gray);
 		pushBackAddChild(m_fields->negativeScale, "negative-scale"_spr);
 
-		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::hideTags(theLevel);
+		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::displayTags(theLevel);
 		else {
-			if (m_fields->twoPlayer) pushBackMakeInvis(m_fields->twoPlayer);
-			if (m_fields->shaderIntolerance) pushBackMakeInvis(m_fields->shaderIntolerance);
-			if (m_fields->cameraIntolerance) pushBackMakeInvis(m_fields->cameraIntolerance);
-			if (m_fields->legacyShip) pushBackMakeInvis(m_fields->legacyShip);
-			if (m_fields->legacyRobot) pushBackMakeInvis(m_fields->legacyRobot);
-			if (m_fields->startFlipped) pushBackMakeInvis(m_fields->startFlipped);
-			if (m_fields->dynamicHeight) pushBackMakeInvis(m_fields->dynamicHeight);
-			if (m_fields->multiRotate) pushBackMakeInvis(m_fields->multiRotate);
-			if (m_fields->twoPointTwo) pushBackMakeInvis(m_fields->twoPointTwo);
-			if (m_fields->negativeScale) pushBackMakeInvis(m_fields->negativeScale);
+			pushBackMakeInvis(m_fields->twoPlayer);
+			pushBackMakeInvis(m_fields->shaderIntolerance);
+			pushBackMakeInvis(m_fields->cameraIntolerance);
+			pushBackMakeInvis(m_fields->legacyShip);
+			pushBackMakeInvis(m_fields->legacyRobot);
+			pushBackMakeInvis(m_fields->startFlipped);
+			pushBackMakeInvis(m_fields->dynamicHeight);
+			pushBackMakeInvis(m_fields->multiRotate);
+			pushBackMakeInvis(m_fields->twoPointTwo);
+			pushBackMakeInvis(m_fields->negativeScale);
 		}
 
 		int i = 0;
@@ -203,19 +180,19 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!theLevel->m_levelString.empty()) {
 			if (!m_fields->isRefreshing) {
 				m_fields->menu->setVisible(false);
-				MyLevelInfoLayer::hideTags(theLevel);
+				MyLevelInfoLayer::displayTags(theLevel);
 			}
 		} else {
-			if (m_fields->twoPlayer) m_fields->twoPlayer->setVisible(false);
-			if (m_fields->shaderIntolerance) m_fields->shaderIntolerance->setVisible(false);
-			if (m_fields->cameraIntolerance) m_fields->cameraIntolerance->setVisible(false);
-			if (m_fields->legacyShip) m_fields->legacyShip->setVisible(false);
-			if (m_fields->legacyRobot) m_fields->legacyRobot->setVisible(false);
-			if (m_fields->startFlipped) m_fields->startFlipped->setVisible(false);
-			if (m_fields->dynamicHeight) m_fields->dynamicHeight->setVisible(false);
-			if (m_fields->multiRotate) m_fields->multiRotate->setVisible(false);
-			if (m_fields->twoPointTwo) m_fields->twoPointTwo->setVisible(false);
-			if (m_fields->negativeScale) m_fields->negativeScale->setVisible(false);
+			if (auto node = m_fields->twoPlayer) node->setVisible(false);
+			if (auto node = m_fields->shaderIntolerance) node->setVisible(false);
+			if (auto node = m_fields->cameraIntolerance) node->setVisible(false);
+			if (auto node = m_fields->legacyShip) node->setVisible(false);
+			if (auto node = m_fields->legacyRobot) node->setVisible(false);
+			if (auto node = m_fields->startFlipped) node->setVisible(false);
+			if (auto node = m_fields->dynamicHeight) node->setVisible(false);
+			if (auto node = m_fields->multiRotate) node->setVisible(false);
+			if (auto node = m_fields->twoPointTwo) node->setVisible(false);
+			if (auto node = m_fields->negativeScale) node->setVisible(false);
 		}
 
 		int i = 0;
@@ -233,16 +210,14 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 };
 
 class $modify(MyFLAlertLayer, FLAlertLayer) {
-	static void onModify(auto & self)
-	{
+	static void onModify(auto & self) {
 		(void) self.setHookPriority("FLAlertLayer::init", -2133456789);
 	}
 	bool init(FLAlertLayerProtocol* delegate, char const* title, gd::string desc, char const* btn1, char const* btn2, float width, bool scroll, float height, float textScale) {
 		const std::string& titleAsString = title;
 		const std::string& descAsString = desc;
-		if (!utils::string::contains(titleAsString, " Trigger Intolerance") && !utils::string::contains(titleAsString, "Camera ") && !utils::string::contains(titleAsString, "Shader ") && !utils::string::startsWith(descAsString, "When determining if a level should display the ") && !utils::string::contains(descAsString, "EverAfter by Galofuf") && !utils::string::contains(descAsString, "HIGHLY DISCOURAGED") && !utils::string::contains(descAsString, "and should be reserved for the likes of NASA supercomputers.")) {
+		if (!utils::string::contains(titleAsString, " Trigger Intolerance") && !utils::string::contains(titleAsString, "Camera ") && !utils::string::contains(titleAsString, "Shader ") && !utils::string::startsWith(descAsString, "When determining if a level should display the ") && !utils::string::contains(descAsString, "EverAfter by Galofuf") && !utils::string::contains(descAsString, "HIGHLY DISCOURAGED") && !utils::string::contains(descAsString, "and should be reserved for the likes of NASA supercomputers."))
 			return FLAlertLayer::init(delegate, title, desc, btn1, btn2, width, scroll, height, textScale);
-		}
 		return FLAlertLayer::init(delegate, title, desc, btn1, btn2, 420.f, true, 320.f, 1.0f);
 	}
 };
