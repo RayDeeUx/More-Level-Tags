@@ -1,17 +1,21 @@
 {
-	"geode": "4.0.1",
+	"geode": "4.3.1",
 	"gd": {
 		"win": "2.2074",
 		"mac": "2.2074",
-		"android": "2.2074"
+		"android": "2.2074",
+		"ios": "2.2074"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
-	"version": "v1.4.0",
+	"version": "v1.4.1",
 	"name": "EvenMoreLevelTags",
-	"developers": ["TheSillyDoggo", "RayDeeUx"],
+	"developers": [
+		"TheSillyDoggo",
+		"RayDeeUx"
+	],
 	"description": "Adds even more level tags based on a level's traits.",
 	"repository": "https://github.com/RayDeeUx/More-Level-Tags",
-	"settings" : {
+	"settings": {
 		"enabled": {
 			"name": "Enabled",
 			"description": "Toggles the mod.",
@@ -29,7 +33,9 @@
 			"description": "Adjust how many shader triggers <co>(regardless of type)</c> need to be included in a level in order to show the shader trigger intolerance tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
 			"type": "int",
 			"default": 5,
-			"control": { "input": true }
+			"control": {
+				"input": true
+			}
 		},
 		"advancedShaderAbuseTolerance": {
 			"name": "Advanced Shader Trigger Intolerance Counter",
@@ -42,7 +48,9 @@
 			"description": "Adjust how many camera triggers <co>(regardless of type)</c> need to be included in a level in order to show the camera trigger intolerance tag.\n\n<cl>You can set this to a negative number to disable the tag entirely.</c>",
 			"type": "int",
 			"default": 5,
-			"control": { "input": true }
+			"control": {
+				"input": true
+			}
 		},
 		"advancedCameraAbuseTolerance": {
 			"name": "Advanced Camera Trigger Intolerance Counter",

@@ -41,19 +41,24 @@
 
 # Ignore build folders
 **/build
+# Ignore platform specific build folders
+build-*/
 
 # Workspace files are user-specific
 *.sublime-workspace
 
 # ILY vscode
 **/.vscode
-.idea/
+
+# Local History for Visual Studio Code
+.history/
 
 # clangd
 .cache/
 
-#CLion
-/cmake-build-release/
-/cmake-build-relwithdebinfo/
-/cmake-build-minsizerel/
-/cmake-build-debug/
+# Visual Studio
+.vs/
+
+# CLion
+.idea/
+/cmake-build-*/
