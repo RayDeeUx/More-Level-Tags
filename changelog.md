@@ -1,4 +1,6 @@
 # EvenMoreLevelTags Changelog
+## v1.4.1
+- Experimental iOS support.
 ## v1.4.0
 - Fix that one longstanding bug where the level tags would go offscreen when downloading a level for the first time.
 - Added two additional tags: <cl>Shader Intolerance</c> and <cl>Camera Intolerance</c>.
