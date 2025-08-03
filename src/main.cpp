@@ -35,22 +35,28 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		bool isRefreshing = false;
 	};
 	void displayTags(const GJGameLevel* theLevel) {
-		std::string decomp = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
-		if (decomp.empty() || m_fields->buttons.empty()) return;
+		const std::string& fullLevelString = ZipUtils::decompressString(theLevel->m_levelString, true, 0);
+		if (fullLevelString.empty() || m_fields->buttons.empty()) return;
+		const size_t locationOfFirstSemicolon = fullLevelString.find_first_of(';');
+		const size_t locationOfBackgroundKey = fullLevelString.find_first_of("kA6,");
+		if (locationOfFirstSemicolon == std::string::npos || locationOfBackgroundKey == std::string::npos) return;
+		const std::string& levelStringKeys = fullLevelString.substr(locationOfBackgroundKey, locationOfFirstSemicolon);
+		if (levelStringKeys.empty()) return;
+		log::info("levelStringKeys: {}", levelStringKeys);
 		displayTagIf(m_fields->twoPlayer, theLevel->m_twoPlayerMode);
 		if (getBool("advancedShaderAbuseTolerance"))
-			displayTagIf(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, decomp) > getInt("shaderAbuseTolerance"));
-		else displayTagIf(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, decomp) > getInt("shaderAbuseTolerance"));
+			displayTagIf(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && frequencyOfRegexPatternInString(shaderIntoleranceRegex, fullLevelString) > getInt("shaderAbuseTolerance"));
+		else displayTagIf(m_fields->shaderIntolerance, getInt("shaderAbuseTolerance") > -1 && useVectorToFindFrequency(shaderIntoleranceVector, fullLevelString) > getInt("shaderAbuseTolerance"));
 		if (getBool("advancedCameraAbuseTolerance"))
-			displayTagIf(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, decomp) > getInt("cameraAbuseTolerance"));
-		else displayTagIf(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, decomp) > getInt("cameraAbuseTolerance"));
-		displayTagIf(m_fields->legacyShip, utils::string::contains(decomp, "kA32,0"));
-		displayTagIf(m_fields->legacyRobot, utils::string::contains(decomp, "kA34,0"));
-		displayTagIf(m_fields->startFlipped, utils::string::contains(decomp, "kA11,1"));
-		displayTagIf(m_fields->dynamicHeight, utils::string::contains(decomp, "kA37,0"));
-		displayTagIf(m_fields->multiRotate, utils::string::contains(decomp, "kA27,0"));
-		displayTagIf(m_fields->twoPointTwo, utils::string::contains(decomp, "kA40,0"));
-		displayTagIf(m_fields->negativeScale, utils::string::contains(decomp, "kA33,0"));
+			displayTagIf(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && frequencyOfRegexPatternInString(cameraIntoleranceRegex, fullLevelString) > getInt("cameraAbuseTolerance"));
+		else displayTagIf(m_fields->cameraIntolerance, getInt("cameraAbuseTolerance") > -1 && useVectorToFindFrequency(cameraIntoleranceVector, fullLevelString) > getInt("cameraAbuseTolerance"));
+		displayTagIf(m_fields->legacyShip, utils::string::contains(fullLevelString, "kA32,0"));
+		displayTagIf(m_fields->legacyRobot, utils::string::contains(fullLevelString, "kA34,0"));
+		displayTagIf(m_fields->startFlipped, utils::string::contains(fullLevelString, "kA11,1"));
+		displayTagIf(m_fields->dynamicHeight, utils::string::contains(fullLevelString, "kA37,0"));
+		displayTagIf(m_fields->multiRotate, utils::string::contains(fullLevelString, "kA27,0"));
+		displayTagIf(m_fields->twoPointTwo, utils::string::contains(fullLevelString, "kA40,0"));
+		displayTagIf(m_fields->negativeScale, utils::string::contains(fullLevelString, "kA33,0"));
 	}
 	void displayTagIf(cocos2d::CCNode* node, const bool condition) {
 		if (!node) return;

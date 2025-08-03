@@ -1,10 +1,10 @@
 {
-	"geode": "4.3.1",
+	"geode": "4.4.0",
 	"gd": {
 		"win": "2.2074",
 		"mac": "2.2074",
-		"android": "2.2074",
-		"ios": "2.2074"
+		"ios": "2.2074",
+		"android": "2.2074"
 	},
 	"id": "raydeeux_thesillydoggo.evenmoreleveltags",
 	"version": "v1.4.1",
@@ -59,25 +59,19 @@
 			"default": false
 		}
 	},
-	"dependencies": [
-		{
-			"id": "geode.node-ids",
-			"version": ">=v1.16.0",
-			"importance": "required"
-		}
-	],
-	"incompatibilities": [
-		{
-			"id": "thesillydoggo.moretags",
+	"dependencies": {
+		"geode.node-ids": ">=v1.16.0"
+	},
+	"incompatibilities": {
+		"thesillydoggo.moretags": {
 			"version": "*",
 			"importance": "superseded"
 		},
-		{
-			"id": "raydeeux.nolevelrefresh",
+		"raydeeux.nolevelrefresh": {
 			"version": "*",
 			"importance": "superseded"
 		}
-	],
+	},
 	"resources": {
 		"spritesheets": {
 			"OneSheet": [
