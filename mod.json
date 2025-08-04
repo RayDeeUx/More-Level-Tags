@@ -64,11 +64,11 @@
 	},
 	"incompatibilities": {
 		"thesillydoggo.moretags": {
-			"version": "*",
+			"version": ">=1.0.0",
 			"importance": "superseded"
 		},
 		"raydeeux.nolevelrefresh": {
-			"version": "*",
+			"version": ">=1.0.0",
 			"importance": "superseded"
 		}
 	},

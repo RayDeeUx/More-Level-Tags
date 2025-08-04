@@ -107,59 +107,66 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (theLevel->m_levelID.value() < 129) return true; // avoid false positives with robtop's levels
 		if (theLevel->m_accountID.value() == 19293579 && !getBool("robsVault")) return true;
 
-		auto creatorInfoMenu = getChildByID("creator-info-menu");
+		CCNode* creatorInfoMenu = getChildByID("creator-info-menu");
 		if (!creatorInfoMenu) return true;
 
-		m_fields->menu = CCMenu::create();
-		m_fields->menu->setScale(0.15f);
-		m_fields->menu->setContentWidth(5000.f);
-		m_fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenu->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0) - 5.f, 7 + 1.6f) + ccp(5, 0));
-		m_fields->menu->setID("more-level-tags-menu"_spr);
-		m_fields->menu->setVisible(false);
-		addChild(m_fields->menu);
+		const float copyIndicatorOffset = getChildByID("copy-indicator") ? 18.f : 0.f;
+		const float highObjIndictorOffset = getChildByID("high-object-indicator") ? 18.f : 0.f;
+		const float creatorInfoMenuHalfWidth = creatorInfoMenu->getScaledContentSize().width / 2.f;
 
-		m_fields->twoPlayer = createTagSprite("2p.png"_spr, CircleBaseColor::Pink);
-		addChildToFieldsMenu(m_fields->twoPlayer, "two-player"_spr);
+		Fields* fields = m_fields.self();
 
-		m_fields->shaderIntolerance = createTagSprite("edit_eShaderBtn_001.png", CircleBaseColor::DarkPurple);
-		addChildToFieldsMenu(m_fields->shaderIntolerance, "shader-intolerance"_spr);
+		fields->menu = CCMenu::create();
+		fields->menu->setScale(0.15f);
+		fields->menu->setContentWidth(5000.f);
+		fields->menu->setAnchorPoint({0.f, .5f});
+		fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenuHalfWidth + 7.f + copyIndicatorOffset + highObjIndictorOffset, 8.6f));
+		fields->menu->setID("more-level-tags-menu"_spr);
+		fields->menu->setVisible(false);
+		addChild(fields->menu);
 
-		m_fields->cameraIntolerance = createTagSprite("cameraIntolerance.png"_spr, CircleBaseColor::DarkPurple);
-		addChildToFieldsMenu(m_fields->cameraIntolerance, "camera-intolerance"_spr);
+		fields->twoPlayer = createTagSprite("2p.png"_spr, CircleBaseColor::Pink);
+		addChildToFieldsMenu(fields->twoPlayer, "two-player"_spr);
 
-		m_fields->legacyShip = createTagSprite("portal_04_extra_2_001.png", CircleBaseColor::Cyan);
-		addChildToFieldsMenu(m_fields->legacyShip, "legacy-ship"_spr);
+		fields->shaderIntolerance = createTagSprite("edit_eShaderBtn_001.png", CircleBaseColor::DarkPurple);
+		addChildToFieldsMenu(fields->shaderIntolerance, "shader-intolerance"_spr);
 
-		m_fields->legacyRobot = createTagSprite("portal_14_extra_2_001.png", CircleBaseColor::Pink);
-		addChildToFieldsMenu(m_fields->legacyRobot, "legacy-robot"_spr);
+		fields->cameraIntolerance = createTagSprite("cameraIntolerance.png"_spr, CircleBaseColor::DarkPurple);
+		addChildToFieldsMenu(fields->cameraIntolerance, "camera-intolerance"_spr);
 
-		m_fields->startFlipped = createTagSprite("portal_02_extra_2_001.png", CircleBaseColor::Pink);
-		addChildToFieldsMenu(m_fields->startFlipped, "flip-gravity"_spr);
+		fields->legacyShip = createTagSprite("portal_04_extra_2_001.png", CircleBaseColor::Cyan);
+		addChildToFieldsMenu(fields->legacyShip, "legacy-ship"_spr);
 
-		m_fields->dynamicHeight = createTagSprite("portal_19_extra_2_001.png", CircleBaseColor::Gray);
-		addChildToFieldsMenu(m_fields->dynamicHeight, "dynamic-height"_spr);
+		fields->legacyRobot = createTagSprite("portal_14_extra_2_001.png", CircleBaseColor::Pink);
+		addChildToFieldsMenu(fields->legacyRobot, "legacy-robot"_spr);
 
-		m_fields->multiRotate = createTagSprite("edit_eRotateComBtn_001.png", CircleBaseColor::Gray);
-		addChildToFieldsMenu(m_fields->multiRotate, "multi-rotate"_spr);
+		fields->startFlipped = createTagSprite("portal_02_extra_2_001.png", CircleBaseColor::Pink);
+		addChildToFieldsMenu(fields->startFlipped, "flip-gravity"_spr);
 
-		m_fields->twoPointTwo = createTagSprite("portal_18_extra_2_001.png", CircleBaseColor::Gray);
-		addChildToFieldsMenu(m_fields->twoPointTwo, "two-point-two"_spr);
+		fields->dynamicHeight = createTagSprite("portal_19_extra_2_001.png", CircleBaseColor::Gray);
+		addChildToFieldsMenu(fields->dynamicHeight, "dynamic-height"_spr);
 
-		m_fields->negativeScale = createTagSprite("edit_eScaleComBtn_001.png", CircleBaseColor::Gray);
-		addChildToFieldsMenu(m_fields->negativeScale, "negative-scale"_spr);
+		fields->multiRotate = createTagSprite("edit_eRotateComBtn_001.png", CircleBaseColor::Gray);
+		addChildToFieldsMenu(fields->multiRotate, "multi-rotate"_spr);
+
+		fields->twoPointTwo = createTagSprite("portal_18_extra_2_001.png", CircleBaseColor::Gray);
+		addChildToFieldsMenu(fields->twoPointTwo, "two-point-two"_spr);
+
+		fields->negativeScale = createTagSprite("edit_eScaleComBtn_001.png", CircleBaseColor::Gray);
+		addChildToFieldsMenu(fields->negativeScale, "negative-scale"_spr);
 
 		if (!theLevel->m_levelString.empty()) MyLevelInfoLayer::displayTags(theLevel);
 		else {
-			makeInvis(m_fields->twoPlayer);
-			makeInvis(m_fields->shaderIntolerance);
-			makeInvis(m_fields->cameraIntolerance);
-			makeInvis(m_fields->legacyShip);
-			makeInvis(m_fields->legacyRobot);
-			makeInvis(m_fields->startFlipped);
-			makeInvis(m_fields->dynamicHeight);
-			makeInvis(m_fields->multiRotate);
-			makeInvis(m_fields->twoPointTwo);
-			makeInvis(m_fields->negativeScale);
+			makeInvis(fields->twoPlayer);
+			makeInvis(fields->shaderIntolerance);
+			makeInvis(fields->cameraIntolerance);
+			makeInvis(fields->legacyShip);
+			makeInvis(fields->legacyRobot);
+			makeInvis(fields->startFlipped);
+			makeInvis(fields->dynamicHeight);
+			makeInvis(fields->multiRotate);
+			makeInvis(fields->twoPointTwo);
+			makeInvis(fields->negativeScale);
 		}
 
 		geode::AxisLayout* layout = RowLayout::create()
@@ -168,10 +175,10 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			->setDefaultScaleLimits(.0001f, 1.f)
 			->setAxisAlignment(AxisAlignment::Start);
 		layout->ignoreInvisibleChildren(true);
-		m_fields->menu->setLayout(layout);
-		m_fields->menu->setAnchorPoint({0.f, .5f});
-		m_fields->menu->setContentWidth(5000.f);
-		m_fields->menu->setVisible(true);
+		fields->menu->setLayout(layout);
+		fields->menu->setAnchorPoint({0.f, .5f});
+		fields->menu->setContentWidth(5000.f);
+		fields->menu->setVisible(true);
 
 		return true;
 	}
@@ -180,42 +187,46 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		LevelInfoLayer::levelDownloadFinished(theLevel);
 
 		const auto creatorInfoMenu = getChildByID("creator-info-menu");
+		Fields* fields = m_fields.self();
 
-		if (!m_fields->menu || !creatorInfoMenu) {
-			m_fields->isRefreshing = false;
+		if (!fields->menu || !creatorInfoMenu) {
+			fields->isRefreshing = false;
 			return;
 		}
 
 		if (!theLevel->m_levelString.empty()) {
-			if (!m_fields->isRefreshing) {
-				m_fields->menu->setVisible(false);
+			if (!fields->isRefreshing) {
+				fields->menu->setVisible(false);
 				MyLevelInfoLayer::displayTags(theLevel);
 			}
 		} else {
-			if (CCNode* node = m_fields->twoPlayer) node->setVisible(false);
-			if (CCNode* node = m_fields->shaderIntolerance) node->setVisible(false);
-			if (CCNode* node = m_fields->cameraIntolerance) node->setVisible(false);
-			if (CCNode* node = m_fields->legacyShip) node->setVisible(false);
-			if (CCNode* node = m_fields->legacyRobot) node->setVisible(false);
-			if (CCNode* node = m_fields->startFlipped) node->setVisible(false);
-			if (CCNode* node = m_fields->dynamicHeight) node->setVisible(false);
-			if (CCNode* node = m_fields->multiRotate) node->setVisible(false);
-			if (CCNode* node = m_fields->twoPointTwo) node->setVisible(false);
-			if (CCNode* node = m_fields->negativeScale) node->setVisible(false);
+			if (CCNode* node = fields->twoPlayer) node->setVisible(false);
+			if (CCNode* node = fields->shaderIntolerance) node->setVisible(false);
+			if (CCNode* node = fields->cameraIntolerance) node->setVisible(false);
+			if (CCNode* node = fields->legacyShip) node->setVisible(false);
+			if (CCNode* node = fields->legacyRobot) node->setVisible(false);
+			if (CCNode* node = fields->startFlipped) node->setVisible(false);
+			if (CCNode* node = fields->dynamicHeight) node->setVisible(false);
+			if (CCNode* node = fields->multiRotate) node->setVisible(false);
+			if (CCNode* node = fields->twoPointTwo) node->setVisible(false);
+			if (CCNode* node = fields->negativeScale) node->setVisible(false);
 		}
 
+		const float copyIndicatorOffset = getChildByID("copy-indicator") ? 18.f : 0.f;
+		const float highObjIndictorOffset = getChildByID("high-object-indicator") ? 18.f : 0.f;
+		const float creatorInfoMenuHalfWidth = creatorInfoMenu->getScaledContentSize().width / 2.f;
 		geode::AxisLayout* layout = RowLayout::create()
 			->setGap(36.f)
 			->setAutoScale(true)
 			->setDefaultScaleLimits(.0001f, 1.f)
 			->setAxisAlignment(AxisAlignment::Start);
 		layout->ignoreInvisibleChildren(true);
-		m_fields->menu->setLayout(layout);
-		m_fields->menu->setAnchorPoint({0.f, .5f});
-		m_fields->menu->setScale(0.15f);
-		m_fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenu->getScaledContentSize().width / 2 + 7 + (getChildByID("copy-indicator") ? 18 : 0) + (getChildByID("high-object-indicator") ? 18 : 0) - 5.f, 7 + 1.6f) + ccp(5, 0));
-		m_fields->menu->setVisible(true);
+		fields->menu->setScale(0.15f);
+		fields->menu->setLayout(layout);
+		fields->menu->setAnchorPoint({0.f, .5f});
+		fields->menu->setPosition(creatorInfoMenu->getPosition() + ccp(creatorInfoMenuHalfWidth + 7.f + copyIndicatorOffset + highObjIndictorOffset, 8.6f));
+		fields->menu->setVisible(true);
 
-		m_fields->isRefreshing = false;
+		fields->isRefreshing = false;
 	}
 };
