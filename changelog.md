@@ -1,4 +1,7 @@
 # EvenMoreLevelTags Changelog
+## v1.5.0
+- Use Geode layouts instead of crackpot math for node positioning and node visibility logic.
+- Fix a longstanding bug where settings from start position objects would be parsed as well.
 ## v1.4.1
 - Experimental iOS support.
 ## v1.4.0
